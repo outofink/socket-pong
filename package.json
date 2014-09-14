@@ -1,0 +1,8 @@
+{
+  "name": "socket-pong",
+  "version": "0.0.1",
+  "description": "multi-device pong using socket.io",
+  "dependencies": {
+    "socket.io": "^1.1.0"
+  }
+}
