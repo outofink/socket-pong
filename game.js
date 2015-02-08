@@ -1,4 +1,4 @@
-var socket = io.connect("http://localhost:3000");
+var socket = io.connect("http://localhost");
 //var socket = io();
 var DEBUG = 1;
 var onscreen = false;
