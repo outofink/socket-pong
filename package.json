@@ -4,10 +4,6 @@
   "description": "multi-device pong using socket.io",
   "author": "outofink",
   "main": "index.js",
-  "files": [
-  	"style.css",
-  	"game.js"
-  	],
   "engines": {
     "node": "0.12.x"
   },
