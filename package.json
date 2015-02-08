@@ -2,6 +2,9 @@
   "name": "socket-pong",
   "version": "0.0.2",
   "description": "multi-device pong using socket.io",
+    "engines": {
+    "node": "0.12.x"
+  },
   "dependencies": {
     "socket.io": "^1.3.3"
   }
