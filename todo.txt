@@ -1,0 +1,14 @@
+now:
+	bounce off paddle at angle
+	lose
+	increase speed? (maybe even smaller paddle?)
+
+later:
+game rooms
+	score board
+winning/losing game
+interface
+
+future:
+support other devices besides iPads
+spectate? (airplaying this would be cool!)
