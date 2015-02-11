@@ -51,7 +51,7 @@ initCanvas()
 function initCanvas() {
 
   //Initialise array
-  paddle = {x:400, y:600, w:300, h:30};
+  paddle = {x:512, y:675, w:250, h:25};
   canvas = document.getElementById("canvas");
 
   var W = window.innerWidth;
@@ -166,7 +166,7 @@ function canDraw() {
         p.vy *= ratio;
 
 
-        if (Math.sqrt(((p.vy * p.vy) + (p.vx * p.vx))) < 25) {
+        if (Math.sqrt(((p.vy * p.vy) + (p.vx * p.vx))) < 30) {
           p.vx*=1.05;
           p.vy*=1.05;
         }

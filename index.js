@@ -12,7 +12,7 @@ io.on('connection', function(socket) {
     users++;
     console.log("there are now " + users + " user(s)")
     if (users % 2 == 0) {
-        socket.broadcast.emit('send ball', {x:512,y:468,vx:0,vy:-10,radius:50});
+        socket.broadcast.emit('send ball', {x:512,y:468,vx:0,vy:-10,radius:35});
         console.log("beginning game");
     }
     socket.on('send ball', function(msg) {
@@ -22,7 +22,7 @@ io.on('connection', function(socket) {
     socket.on('you win', function() {
 	    console.log('win');
 	    setTimeout(function() {
-	        socket.broadcast.emit('send ball', {x:512,y:468,vx:0,vy:-10,radius:50});
+	        socket.broadcast.emit('send ball', {x:512,y:468,vx:0,vy:-10,radius:35});
 	    }, 1500);
 	    socket.broadcast.emit('win');
 	});
