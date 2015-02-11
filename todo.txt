@@ -12,3 +12,7 @@ interface
 future:
 support other devices besides iPads
 spectate? (airplaying this would be cool!)
+
+for claire:
+confetti on win
+moo on win
