@@ -9,6 +9,7 @@ if (DEBUG == 1) {
 var hudmsg = "";
 
 var score = 0;
+var theirScore = 0;
 var paddle;
 var canvas;
 var deadball = {x:0,y:0,vx:0,vy:0,radius:0};
@@ -95,7 +96,7 @@ function canDraw() {
       
       hudmsg ="You lose!";
       socket.emit('you win');
-
+      theirScore+=1;
       setTimeout(function() {
         hudmsg ="";
       }, 1500);
@@ -176,6 +177,10 @@ function canDraw() {
   ctx.font = "bold 72px Arial";
   ctx.textAlign="left";
   ctx.fillText(score, 25, 75);
+  //theirScore
+  ctx.font = "bold 32px Arial";
+  ctx.textAlign="left";
+  ctx.fillText(theirScore, 75, 50);
 
 } 
 
