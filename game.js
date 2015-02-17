@@ -1,0 +1,200 @@
+var DEBUG = 0;
+
+var socket = io.connect("https://socket-pong.herokuapp.com/");
+var onscreen = false;
+
+if (DEBUG == 1) {
+  var socket = io.connect("http://localhost"); //for testing
+}
+var hudmsg = "";
+
+var score = 0;
+var paddle;
+var canvas;
+var deadball = {x:0,y:0,vx:0,vy:0,radius:0};
+
+var ball=deadball;
+socket.on('send ball', function(msg){
+  ball = msg;
+  onscreen = true;
+});
+socket.on('win', function(msg){
+  hudmsg="You win!";
+  score+=1;
+  setTimeout(function() {
+        hudmsg ="";
+  }, 1500);
+});
+
+initCanvas()
+function initCanvas() {
+
+  //Initialise array
+  paddle = {x:512, y:675, w:250, h:25};
+  canvas = document.getElementById("canvas");
+
+  var W = window.innerWidth;
+  var H = window.innerHeight;
+
+  canvas.width= W;
+  canvas.height= H;
+  canvas.style.width = W;
+  canvas.style.height = H;
+
+  //Add eventlistener to canvas
+  gameLoop();
+  canvas.addEventListener('touchmove', function() {
+    var touch = event.targetTouches[0];
+
+    if(detectHit(paddle.x, paddle.y, touch.pageX, touch.pageY, paddle.w, paddle.h)) {
+      var buffer = 20;
+      if (((touch.pageX-paddle.w/2 - buffer) > 0) && ((touch.pageX+paddle.w/2 + buffer) < canvas.width)) {
+        paddle.x = touch.pageX;
+      }
+      else if ((touch.pageX-paddle.w/2 - buffer) <= 0) {
+        paddle.x = paddle.w/2 + buffer;
+      }
+      else if ((touch.pageX+paddle.w/2 + buffer) >= canvas.width) {
+        paddle.x = canvas.width - paddle.w/2 - buffer;
+      }
+
+      //canDraw();
+    }
+    event.preventDefault();
+  }, false);
+
+  //canDraw();
+}
+
+function detectHit(x1,y1,x2,y2,w,h) {
+
+  //Very simple detection here, could use distance between two pts e.g., or more complex polygonal bounding boxes
+  if(Math.abs(x2-x1)>w/2) return false;
+  return true;
+}
+
+function canDraw() {
+  //clear canvas
+  canvas = document.getElementById("canvas");
+  var ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  p=ball;
+
+  if ((p.x + p.radius) > canvas.width) {
+
+      p.x = canvas.width - p.radius;
+      p.vx *= -1;
+  }
+  else if ((p.x - p.radius) < 0) {
+      p.x = p.radius;
+      p.vx *= -1;
+  }
+
+  if ((p.y + p.radius) > canvas.height) {
+      
+      hudmsg ="You lose!";
+      socket.emit('you win');
+
+      setTimeout(function() {
+        hudmsg ="";
+      }, 1500);
+      onscreen = false;
+      ball=deadball;
+
+  }
+
+  else if ((p.y < -100) && (p.vy < 0)) {
+      //p.y = -100;
+      if (onscreen) {
+        socket.emit('send ball', {x:canvas.width-p.x, y:p.y, vx:-p.vx, vy:-p.vy, radius:p.radius});
+        onscreen = false;
+      }
+      ball=deadball;
+
+  }
+//   (     ball and paddle overlap on y-axis     )    (  ball and paddle overlap on x-axis   )   (going down)   (                 not too overlapped                 )
+  if (((p.y+p.radius) - (paddle.y-paddle.h/2) > 0) && (Math.abs(p.x - paddle.x) <= paddle.w/2+15) && (p.vy > 0) && ((p.y+p.radius) - (paddle.y-paddle.h/2) < p.radius))  {
+    p.vy *= -1;
+        dist = paddle.y - p.y;
+        minDist = paddle.h/2 + p.radius;
+        var dx = paddle.x - p.x;
+        var dy = paddle.y - p.y;
+
+        var tx = p.x + ((dx / dist) * minDist);
+        var ty = p.y + ((dy / dist) * minDist);
+        console.log(dist);
+        console.log(minDist);
+        console.log(tx);
+        console.log(ty);
+        var ax = (tx - paddle.x);
+        var ay = (ty - paddle.y);
+        
+        var OLDpvx = p.vx;
+        var OLDpvy = p.vy;
+        
+        p.x -= ax;
+        p.y -= ay;
+        
+        
+        p.vx -= ax;
+        p.vy -= ay;
+
+        var ratio = Math.sqrt(((OLDpvx * OLDpvx) + (OLDpvy * OLDpvy))) / Math.sqrt(((p.vx * p.vx) +  (p.vy * p.vy)));
+        p.vx *= ratio;
+        p.vy *= ratio;
+
+
+        if (Math.sqrt(((p.vy * p.vy) + (p.vx * p.vx))) < 30) {
+          p.vx*=1.05;
+          p.vy*=1.05;
+        }
+  }
+  p.x += p.vx;
+  p.y += p.vy;
+  //ball
+  ctx.beginPath();
+  ctx.fillStyle = "black";
+  ctx.arc(p.x, p.y, (p.radius), Math.PI*2, false);
+  ctx.fill();
+  //debug info
+  if (DEBUG == 1) {
+    if (onscreen == false) {ctx.fillStyle="red";}
+    ctx.font = "bold 16px Arial";
+    ctx.textAlign="left";
+    ctx.fillText(JSON.stringify(ball), 50, canvas.height-50);
+  }
+  //paddle
+  ctx.fillStyle = 'blue';
+  ctx.fillRect(paddle.x - paddle.w/2, paddle.y- paddle.h/2, paddle.w, paddle.h);
+  //hud message
+  ctx.font = "bold 108px Arial";
+  ctx.textAlign="center";
+  ctx.fillStyle = 'black';
+  ctx.fillText(hudmsg, canvas.width/2, canvas.height/2);
+  //score
+  ctx.font = "bold 72px Arial";
+  ctx.textAlign="left";
+  ctx.fillText(score, 25, 75);
+
+} 
+
+var fps = 60;
+var now;
+var then = Date.now();
+var interval = 1000/fps;
+var delta;
+
+function gameLoop() {
+  requestAnimationFrame(gameLoop);
+     
+    now = Date.now();
+    delta = now - then;
+     
+    if (delta > interval) {
+      then = now - (delta % interval);
+
+      canDraw();
+
+  }
+};
