@@ -147,9 +147,7 @@ function canUpdate() {
         var OLDpvx = ball.vx;
         var OLDpvy = ball.vy;
 
-        ball.x -= ax;
-        ball.y -= ay;
-
+        ball.y = paddle.y - paddle.h/2 - ball.radius;
 
         ball.vx -= ax;
         ball.vy -= ay;
