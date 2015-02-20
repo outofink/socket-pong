@@ -13,8 +13,6 @@ var onscreen = false;
 var paddle = {x:512, y:675, w:250, h:25};
 var canvas = document.getElementById("canvas");
 
-var gameActive = true;
-
 var deadball = {x:0, y:0, vx:0, vy:0, radius:0};
 
 var ball = deadball;
@@ -43,14 +41,17 @@ function initCanvas() {
 }
 
 //Very simple detection, could use distance between two points, or more complex polygonal bounding boxes
-function detectHit(x1, y1, x2, y2, w, h) {
+function paddleCheck(x1, x2, w) {
     if (Math.abs(x2 - x1) > w / 2) return false;
+    return true;
+}
+function buttonCheck(x1, y1, x2, y2, w, h) {
+    if ((Math.abs((x2+w/2) - x1) > w / 2) || (Math.abs((y2+h/2) - y1) > h / 2)) return false;
     return true;
 }
 
 function canDraw() {
     //clear canvas
-    canvas = document.getElementById("canvas");
     var ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     //ball
@@ -71,7 +72,7 @@ function canDraw() {
     ctx.fillStyle = 'blue';
     ctx.fillRect(paddle.x - paddle.w / 2, paddle.y - paddle.h / 2, paddle.w, paddle.h);
     //hud message
-    ctx.font = "bold 108px Arial";
+    ctx.font = "bold 108px Coming Soon";
     ctx.textAlign = "center";
     ctx.fillStyle = 'black';
     ctx.fillText(hudmsg, canvas.width / 2, canvas.height / 2);
@@ -159,35 +160,12 @@ function canUpdate() {
             ball.vy *= 1.1;
         }
     }
-
 }
-var fps = 60;
-var now;
-var then = Date.now();
-var interval = 1000 / fps;
-var delta;
-
-initCanvas()
-
-function gameLoop() {
-    requestAnimationFrame(gameLoop);
-
-    now = Date.now();
-    delta = now - then;
-
-    if (delta > interval) {
-        then = now - (delta % interval);
-        if (gameActive) {
-            canUpdate();
-            canDraw();
-        }
-    }
-};
 
 canvas.addEventListener('touchmove', function() {
     var touch = event.targetTouches[0];
 
-    if (detectHit(paddle.x, paddle.y, touch.pageX, touch.pageY, paddle.w, paddle.h)) {
+    if (gameScreen && paddleCheck(paddle.x, touch.pageX, paddle.w)) {
         var buffer = 20;
         if (((touch.pageX - paddle.w / 2 - buffer) > 0) && ((touch.pageX + paddle.w / 2 + buffer) < canvas.width)) {
             paddle.x = touch.pageX;
@@ -200,4 +178,3 @@ canvas.addEventListener('touchmove', function() {
     event.preventDefault();
 }, false);
 
-gameLoop();
