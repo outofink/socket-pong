@@ -1,6 +1,6 @@
 {
   "name": "socket-pong",
-  "version": "0.0.3",
+  "version": "1.0.0",
   "description": "multi-device pong using socket.io",
   "author": "outofink",
   "main": "index.js",
@@ -9,6 +9,6 @@
   },
     "dependencies": {
     "express": "^4.11.2",
-    "socket.io": "^1.3.3"
+    "socket.io": "^1.3.4"
   }
 }
