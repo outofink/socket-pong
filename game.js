@@ -155,7 +155,7 @@ function canUpdate() {
         ball.vy *= ratio;
 
         //speed up the ball (but not too fast...)
-        if (Math.sqrt(((ball.vy * ball.vy) + (ball.vx * ball.vx))) < 35) {
+        if (Math.sqrt(((ball.vy * ball.vy) + (ball.vx * ball.vx))) < 32) {
             ball.vx *= 1.1;
             ball.vy *= 1.1;
         }
