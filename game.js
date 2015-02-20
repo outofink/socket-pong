@@ -86,6 +86,10 @@ function canDraw() {
 }
 
 function canUpdate() {
+    //standard updating
+    ball.x += ball.vx;
+    ball.y += ball.vy;
+
     //bounce off left or right side
     if ((ball.x + ball.radius) > canvas.width) {
 
@@ -129,20 +133,13 @@ function canUpdate() {
     if (
       ((ball.y + ball.radius) - (paddle.y - paddle.h / 2) > 0) && // ball and paddle overlap on y-axis
       (Math.abs(ball.x - paddle.x) <= paddle.w / 2 + 15) && // ball and paddle overlap on x-axis
-      ((ball.y + ball.radius) - (paddle.y - paddle.h / 2) < ball.radius) && //not too overlapped
-      (ball.vy > 0) // going down
+      ((ball.y + ball.radius) - (paddle.y - paddle.h / 2) < ball.radius) //not too overlapped
     ) { 
         ball.vy *= -1;
-        dist = paddle.y - ball.y;
-        minDist = paddle.h / 2 + ball.radius;
-        var dx = paddle.x - ball.x;
-        var dy = paddle.y - ball.y;
 
-        var tx = ball.x + ((dx / dist) * minDist);
-        var ty = ball.y + ((dy / dist) * minDist);
-
-        var ax = (tx - paddle.x);
-        var ay = (ty - paddle.y);
+        //where all the magic happens
+        var ax = (ball.x + ((paddle.x - ball.x) / (paddle.y - ball.y)) * (paddle.h / 2 + ball.radius) - paddle.x);
+        var ay = (ball.y + ((paddle.y - ball.y) / (paddle.y - ball.y)) * (paddle.h / 2 + ball.radius) - paddle.y);
 
         var OLDpvx = ball.vx;
         var OLDpvy = ball.vy;
@@ -157,14 +154,11 @@ function canUpdate() {
         ball.vy *= ratio;
 
         //speed up the ball (but not too fast...)
-        if (Math.sqrt(((ball.vy * ball.vy) + (ball.vx * ball.vx))) < 30) {
-            ball.vx *= 1.05;
-            ball.vy *= 1.05;
+        if (Math.sqrt(((ball.vy * ball.vy) + (ball.vx * ball.vx))) < 35) {
+            ball.vx *= 1.1;
+            ball.vy *= 1.1;
         }
     }
-    //standard updating
-    ball.x += ball.vx;
-    ball.y += ball.vy;
 
 }
 var fps = 60;
