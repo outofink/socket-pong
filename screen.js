@@ -443,6 +443,9 @@ canvas.addEventListener('touchstart', function() {
 	if (gameScreen && buttonCheck(touch.pageX, touch.pageY, 487, 359, 50, 50)) {
 	    activeBall = true;
 	}
+	if (mainScreen) {
+	    alert([touch.pageX, touch.pageY]);
+	}
     event.preventDefault();
 }, false);
 
