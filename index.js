@@ -3,35 +3,74 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
+var rooms = [];
+
+function createRoom() {
+    var room = parseInt(Math.random() * 10000)
+    while (rooms[room] != undefined) {
+        room = parseInt(Math.random() * 10000)
+    }
+    return room
+}
 app.get('/', function(req, res) {
     res.sendFile('index.html', {root: __dirname});
 });
 app.use(express.static(__dirname));
 
-var users = 0;
 io.on('connection', function(socket) {
     console.log("client connected");
-    users++;
-    console.log("there are now " + users + " user(s)")
-    if (users % 2 == 0) {
-        socket.broadcast.emit('send ball', {x:512,y:468,vx:0,vy:-10,radius:35});
-        console.log("beginning game");
-    }
+
     socket.on('send ball', function(msg) {
-        console.log('ball: ' + msg.x);
-        socket.broadcast.emit('send ball', msg);
+        socket.broadcast.to(parseInt(msg[2])).emit('send ball', [msg[0], msg[1]]);
     });
-    socket.on('you win', function() {
-	    console.log('win');
-	    setTimeout(function() {
-	        socket.broadcast.emit('send ball', {x:512,y:468,vx:0,vy:-10,radius:35});
-	    }, 1500);
-	    socket.broadcast.emit('win');
+    socket.on('getRoom', function() {
+        var room =createRoom();
+        rooms[room]= [socket.id];
+        socket.join(room);
+        socket.emit('getRoom', room)
+    });
+    socket.on('checkRoom', function(msg) {
+        if (rooms[parseInt(msg)] == undefined) {
+            socket.emit('checkRoom', "No game exists with that ID")
+        }
+        else if (rooms[parseInt(msg)].length != 1) {
+            socket.emit('checkRoom', "Game is already full")
+        }
+        else {
+            socket.emit('checkRoom', "success");
+            rooms[parseInt(msg)][1] = socket.id;
+            socket.join(parseInt(msg));
+            socket.broadcast.to(parseInt(msg)).emit('start');
+            socket.broadcast.to(parseInt(msg)).emit('send ball', [{x:512,y:384,vx:0,vy:-10,radius:35}, true]);
+        }
+    });
+    socket.on('point', function(msg) {
+	    socket.broadcast.to(parseInt(msg)).emit('send ball', [{x:512,y:384,vx:0,vy:-10,radius:35}, true]);
+	    socket.broadcast.to(parseInt(msg)).emit('point');
 	});
+    socket.on('win', function(msg) {
+        socket.broadcast.to(parseInt(msg[0])).emit('win', 1-msg[1]);
+    });
+    socket.on('leaveRoom', function(msg) {
+        oldRooms = Object.keys(io.sockets.adapter.rooms);
+        for (i = 0; i < oldRooms.length; i++) {
+            if (oldRooms[i].toString().length<=4) {
+                if (!msg) socket.broadcast.to(oldRooms[i]).emit('gameOver', 'disconnect')
+                rooms[oldRooms[i]] = undefined;
+                socket.leave(oldRooms[i]);
+            }
+        }
+    });
     socket.on('disconnect', function() {
+        oldRooms = Object.keys(io.sockets.adapter.rooms);
+        for (i = 0; i < oldRooms.length; i++) {
+            if (oldRooms[i].toString().length<=4) {
+                socket.broadcast.to(oldRooms[i]).emit('gameOver', 'disconnect')
+                rooms[oldRooms[i]] = undefined;
+                socket.leave(oldRooms[i]);
+            }
+        }
         console.log("client disconnected");
-        users--;
-        console.log("there are now " + users + " user(s)")
     });
 });
 

@@ -1,6 +1,5 @@
 now:
-game rooms
-winning/losing game
+DONE
 
 later:
 support other devices besides iPads (includes retina on ipads)

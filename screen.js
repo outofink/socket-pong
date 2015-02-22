@@ -4,12 +4,16 @@ var waitScreen = false;
 var joinScreen = false;
 var gameScreen = false;
 var loadingScreen = false;
+var overScreen = false;
 
-var pointsChecked = 3;
+var pointsChecked = 0;
 var gameid = '';
 var gameidfull = false;
 
+var forceEnd = false;
+
 var joinmsg = '';
+
 function initCanvas() {
     var ctx = canvas.getContext('2d');
 
@@ -19,6 +23,7 @@ function initCanvas() {
     canvas.height = H;
     canvas.style.width = W;
     canvas.style.height = H;
+
     //Will add HD soon!
     // if (window.devicePixelRatio > 1) {
     //     ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
@@ -38,11 +43,6 @@ function setId(val) {
 		gameid+=val.toString();
 }
 
-function checkID(id) {
-	joinmsg = "No game exists with that ID"
-	gameid = '';
-}
-
 function setScreen() {
     mainScreen = false;
     pointsScreen = false;
@@ -50,6 +50,7 @@ function setScreen() {
     joinScreen = false;
     gameScreen = false;
     loadingScreen = false;
+    overScreen = false;
 
     return true
 }
@@ -227,7 +228,7 @@ function wait() {
     ctx.fillStyle = 'black';
     ctx.font = "bold 108px Coming Soon";
     ctx.textAlign = "center";
-    ctx.fillText(gameid, 512, 250);
+    ctx.fillText(("000"+serverID).slice(-4), 512, 250);
     //"Wating for opponent"
     ctx.fillStyle = 'black';
     ctx.font = "bold 48px Coming Soon";
@@ -314,9 +315,63 @@ function joining() {
     ctx.textAlign = "left";
     ctx.fillText("◀ BACK", 10, 45);
 }
+function over() {
+	//clear canvas
+    var ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    //You Win/Lose/Tie
+    var msg = '';
+    if (win==1) msg = "You Win!";
+    else if (win==0) msg = "You Lose!";
+
+	ctx.fillStyle = 'black';
+    ctx.font = "bold 108px Coming Soon";
+    ctx.textAlign = "center";
+    ctx.fillText(msg, 512, 200);
+    //check for forfeit
+    if (forceEnd) {
+		ctx.fillStyle = 'red';
+	    ctx.font = "bold 32px Coming Soon";
+	    ctx.textAlign = "center";
+	    ctx.fillText("(They forfeited)", 512, 250);
+	}
+    //your points
+    ctx.fillStyle = 'black';
+    ctx.font = "bold 64px Coming Soon";
+    ctx.textAlign = "center";
+    ctx.fillText("You:", 320, 350);
+    //their points
+    ctx.fillStyle = 'black';
+    ctx.font = "bold 64px Coming Soon";
+    ctx.textAlign = "center";
+    ctx.fillText("Other Guy:", 704, 350);
+    //your points actually
+    ctx.fillStyle = 'black';
+    ctx.font = "bold 96px Coming Soon";
+    ctx.textAlign = "center";
+    ctx.fillText(score, 320, 475);
+    //their points actually
+    ctx.fillStyle = 'black';
+    ctx.font = "bold 96px Coming Soon";
+    ctx.textAlign = "center";
+    ctx.fillText(theirScore, 704, 475);
+    //go back to Main Menu/dsiconnect
+    ctx.beginPath();
+    ctx.rect(424, 600, 175, 50);
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = 'black';
+    ctx.stroke();
+
+    ctx.fillStyle = 'black';
+    ctx.font = "bold 24px Coming Soon";
+    ctx.textAlign = "center";
+    ctx.fillText("MAIN MENU", 512, 635);
+}
+
 canvas.addEventListener('touchstart', function() {
 	var touch = event.targetTouches[0];
 	if (mainScreen && buttonCheck(touch.pageX, touch.pageY, 122, 359, 350, 150)) {
+		pointsChecked = 3;
 	    pointsScreen = setScreen();
 	}
 	if (mainScreen && buttonCheck(touch.pageX, touch.pageY, 552, 359, 350, 150)) {
@@ -333,13 +388,15 @@ canvas.addEventListener('touchstart', function() {
 	}
 	if (pointsScreen && buttonCheck(touch.pageX, touch.pageY, 5, 10, 100, 50)) {
 	    mainScreen = setScreen();
-	    pointsChecked = 3;
+	    pointsChecked = 0;
 	}
 	if (pointsScreen && buttonCheck(touch.pageX, touch.pageY, 337, 500, 350, 100)) {
 	    waitScreen = setScreen();
+	    socket.emit('getRoom');
 	}
 	if (waitScreen && buttonCheck(touch.pageX, touch.pageY, 424, 600, 175, 50)) {
 	    mainScreen = setScreen();
+	    socket.emit('leaveRoom', true);
 	}
 	var j = 0;
 	for (i=1;i<10;i++) {
@@ -353,12 +410,38 @@ canvas.addEventListener('touchstart', function() {
 	    setId(0)
 	}
 	if (joinScreen && gameidfull && buttonCheck(touch.pageX, touch.pageY, 572, 638, 75, 75)) {
-	    checkID(gameid);
+	    socket.emit('checkRoom', gameid);
 	}
 	if (joinScreen && buttonCheck(touch.pageX, touch.pageY, 5, 10, 100, 50)) {
 	    mainScreen = setScreen();
 	    joinmsg = '';
 	    gameid = '';
+	}
+	if (gameScreen && buttonCheck(touch.pageX, touch.pageY, 910, 5, 100, 25)) {
+	    mainScreen = setScreen();
+	    socket.emit('leaveRoom', false);
+	    win = -1
+	    forceEnd = 0;
+	    score = 0;
+	    theirScore = 0;
+	    gameid = '';
+	    serverID = undefined;
+	    ball=deadball;
+	}
+	if (overScreen && buttonCheck(touch.pageX, touch.pageY, 424, 600, 175, 50)) {
+	    mainScreen = setScreen();
+	    socket.emit('leaveRoom', true);
+	    win = -1
+	    forceEnd = 0;
+	    score = 0;
+	    theirScore = 0;
+	    gameid = '';
+	    serverID = undefined;
+	    	    ball=deadball;
+
+	}
+	if (gameScreen && buttonCheck(touch.pageX, touch.pageY, 487, 359, 50, 50)) {
+	    activeBall = true;
 	}
     event.preventDefault();
 }, false);
@@ -371,36 +454,34 @@ var delta;
 
 initCanvas()
 
-//loadingScreen = setScreen();
-gameScreen = setScreen();
+loadingScreen = setScreen();
+//pointsScreen = setScreen();
 
 function gameLoop() {
     requestAnimationFrame(gameLoop);
-
-    now = Date.now();
-    delta = now - then;
-
-    if (delta > interval) {
-        then = now - (delta % interval);
-        if (gameScreen) {
-            canUpdate();
-            canDraw();
-        }
-        if (mainScreen) {
-            mainMenu();
-        }
-        if (loadingScreen) {
-            loading();
-        }
-        if (pointsScreen) {
-        	points();
-        }
-        if (waitScreen) {
-        	wait();
-        }
-        if (joinScreen) {
-        	joining();
-        }
+    if (gameScreen) {
+    	if (activeBall) {
+    	    canUpdate();
+		}
+        canDraw();
+    }
+    if (mainScreen) {
+        mainMenu();
+    }
+    if (loadingScreen) {
+        loading();
+    }
+    if (pointsScreen) {
+    	points();
+    }
+    if (waitScreen) {
+    	wait();
+    }
+    if (joinScreen) {
+    	joining();
+    }
+    if (overScreen) {
+    	over();
     }
 };
 

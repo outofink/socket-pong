@@ -3,8 +3,6 @@ var DEBUG = 0;
 if (DEBUG == 0) var socket = io.connect("https://socket-pong.herokuapp.com/");
 if (DEBUG == 1) var socket = io.connect("http://localhost"); //for testing
 
-var hudmsg = "";
-
 var score = 0;
 var theirScore = 0;
 
@@ -17,17 +15,60 @@ var deadball = {x:0, y:0, vx:0, vy:0, radius:0};
 
 var ball = deadball;
 
+var serverID = undefined;
+
+var win = -1;
+
+var activeBall = true;
+
 //socket inputs
 socket.on('send ball', function(msg) {
-    ball = msg;
+    ball = msg[0];
     onscreen = true;
+    if (msg[1]) {
+        activeBall = false;
+    }
 });
 socket.on('win', function(msg) {
-    hudmsg = "You win!";
+    win = msg;
+    overScreen = setScreen();
+});
+socket.on('point', function(msg) {
     score += 1;
-    setTimeout(function() {
-        hudmsg = "";
-    }, 1500);
+    if (score == pointsChecked) {
+        win = 1;
+        overScreen = setScreen();
+        socket.emit('win', [serverID, 1]);
+    }
+});
+socket.on('msg', function(msg) {
+    console.log(msg);
+});
+socket.on('checkRoom', function(msg) {
+    if (msg != "success") {
+        joinmsg = msg;
+        gameid = '';
+    }
+    else {
+        serverID = gameid;
+        var activeBall = true;
+        gameScreen = setScreen();
+    }
+});
+socket.on('getRoom', function(msg) {
+    serverID = msg;
+});
+socket.on('start', function() {
+    var activeBall = true;
+    gameScreen = setScreen();
+});
+socket.on('gameOver', function() {
+    win = 1;
+    forceEnd = true;
+    overScreen = setScreen();
+    ball = deadball;
+    gameid = '';
+    serverID = undefined;
 });
 
 //Very simple detection, could use distance between two points, or more complex polygonal bounding boxes
@@ -61,12 +102,8 @@ function canDraw() {
     //paddle
     ctx.fillStyle = 'blue';
     ctx.fillRect(paddle.x - paddle.w / 2, paddle.y - paddle.h / 2, paddle.w, paddle.h);
-    //hud message
-    ctx.font = "bold 108px Coming Soon";
-    ctx.textAlign = "center";
-    ctx.fillStyle = 'black';
-    ctx.fillText(hudmsg, canvas.width / 2, canvas.height / 2);
     //score
+    ctx.fillStyle = 'black';
     ctx.font = "bold 72px Arial";
     ctx.textAlign = "left";
     ctx.fillText(score, 25, 75);
@@ -74,6 +111,24 @@ function canDraw() {
     ctx.font = "bold 32px Arial";
     ctx.textAlign = "left";
     ctx.fillText(theirScore, 75, 50);
+    //hudmsg
+    if (!activeBall) {
+        ctx.fillStyle = 'black';
+        ctx.font = "bold 64px Coming Soon";
+        ctx.textAlign = "center";
+        ctx.fillText("Touch ball to start", 512, 550);
+    }
+    //disconnect
+    ctx.beginPath();
+    ctx.rect(910, 5, 100, 25);
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = 'black';
+    ctx.stroke();
+
+    ctx.fillStyle = 'black';
+    ctx.font = "bold 16px Coming Soon";
+    ctx.textAlign = "center";
+    ctx.fillText("DISCONNECT", 960, 25);
 }
 
 function canUpdate() {
@@ -95,11 +150,13 @@ function canUpdate() {
     if ((ball.y + ball.radius) > canvas.height) {
 
         hudmsg = "You lose!";
-        socket.emit('you win');
+        socket.emit('point', serverID);
         theirScore += 1;
-        setTimeout(function() {
-            hudmsg = "";
-        }, 1500);
+        if (theirScore == pointsChecked) {
+            win = 0;
+            overScreen = setScreen();
+            socket.emit('win', [serverID, 0]);
+        }
         onscreen = false;
         ball = deadball;
 
@@ -107,20 +164,21 @@ function canUpdate() {
     //hit the top 
     else if ((ball.y < -100) && (ball.vy < 0)) {
         //ball.y = -100;
+        console.log("thinga")
         if (onscreen) {
-            socket.emit('send ball', {
+            socket.emit('send ball', [{
                 x: canvas.width - ball.x,
                 y: ball.y,
                 vx: -ball.vx,
                 vy: -ball.vy,
                 radius: ball.radius
-            });
+            }, false, serverID]);
             onscreen = false;
         }
         ball = deadball;
 
     }
-    // hit the paddle (a bit experimental...)
+
     if (
       ((ball.y + ball.radius) - (paddle.y - paddle.h / 2) > 0) && // ball and paddle overlap on y-axis
       (Math.abs(ball.x - paddle.x) <= paddle.w / 2 + 15) && // ball and paddle overlap on x-axis
@@ -130,7 +188,7 @@ function canUpdate() {
 
         //where all the magic happens
         var ax = (ball.x + ((paddle.x - ball.x) / (paddle.y - ball.y)) * (paddle.h / 2 + ball.radius) - paddle.x);
-        var ay = (ball.y + ((paddle.y - ball.y) / (paddle.y - ball.y)) * (paddle.h / 2 + ball.radius) - paddle.y);
+        var ay = (ball.y + (paddle.h / 2 + ball.radius) - paddle.y);
 
         var OLDpvx = ball.vx;
         var OLDpvy = ball.vy;
