@@ -30,16 +30,6 @@ socket.on('win', function(msg) {
     }, 1500);
 });
 
-function initCanvas() {
-    var W = window.innerWidth;
-    var H = window.innerHeight;
-
-    canvas.width = W;
-    canvas.height = H;
-    canvas.style.width = W;
-    canvas.style.height = H;
-}
-
 //Very simple detection, could use distance between two points, or more complex polygonal bounding boxes
 function paddleCheck(x1, x2, w) {
     if (Math.abs(x2 - x1) > w / 2) return false;

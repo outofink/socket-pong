@@ -1,17 +1,10 @@
 now:
-	bounce off paddle at angle
-	lose
-	increase speed? (maybe even smaller paddle?)
+game rooms
+winning/losing game
 
 later:
-game rooms
-	score board
-winning/losing game
-interface
-
-future:
-support other devices besides iPads
-spectate? (airplaying this would be cool!)
+support other devices besides iPads (includes retina on ipads)
+spectate? (airplaying this would be cool!) [this seems really hard]
 
 for claire:
 confetti on win
