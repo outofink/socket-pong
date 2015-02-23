@@ -17,21 +17,23 @@ var joinmsg = '';
 function initCanvas() {
     var ctx = canvas.getContext('2d');
 
-    var W = window.innerWidth;
-    var H = window.innerHeight;
+    //var W = window.innerWidth;   //not actuall true
+    //var H = window.innerHeight;
+    var W = 988;   //experimentally found
+    var H = 720;
     canvas.width = W;
     canvas.height = H;
     canvas.style.width = W;
     canvas.style.height = H;
 
     //Will add HD soon!
-    // if (window.devicePixelRatio > 1) {
-    //     ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-    //     canvas.width *= window.devicePixelRatio;
-    //     canvas.height *= window.devicePixelRatio;
-    //     canvas.style.width = W + "px";
-    //     canvas.style.height = H + "px";
-    // }
+    if (window.devicePixelRatio > 1) {
+        ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+        canvas.width *= window.devicePixelRatio;
+        canvas.height *= window.devicePixelRatio;
+        canvas.style.width = W + "px";
+        canvas.style.height = H + "px";
+    }
 }
 
 function setId(val) {
@@ -65,9 +67,9 @@ function loading() {
     ctx.fillText("", 0, 0);
     //Loading screen
     ctx.fillStyle = 'black';
-    ctx.font = "108px Arial";
+    ctx.font = "216px Arial";
     ctx.textAlign = "center";
-    ctx.fillText("Loading", 512, 424);
+    ctx.fillText("Loading", 988, 797);
     setTimeout(function() {
         mainScreen = setScreen();
     }, 750);
@@ -79,41 +81,41 @@ function mainMenu() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     //"Create Game"
     ctx.beginPath();
-    ctx.rect(122, 359, 350, 150);
-    ctx.lineWidth = 5;
+    ctx.rect(236, 675, 700, 300);
+    ctx.lineWidth = 10;
     ctx.strokeStyle = 'black';
     ctx.stroke();
 
     ctx.fillStyle = 'black';
-    ctx.font = "bold 48px Coming Soon";
+    ctx.font = "bold 96px Coming Soon";
     ctx.textAlign = "center";
-    ctx.fillText("Create Game", 297, 450);
+    ctx.fillText("Create Game", 586, 850);
     //"Join Game"
     ctx.beginPath();
-    ctx.rect(552, 359, 350, 150);
-    ctx.lineWidth = 5;
+    ctx.rect(1065, 675, 700, 300);
+    ctx.lineWidth = 10;
     ctx.strokeStyle = 'black';
     ctx.stroke();
 
-    ctx.font = "bold 48px Coming Soon";
+    ctx.font = "bold 96px Coming Soon";
     ctx.textAlign = "center";
-    ctx.fillText("Join Game", 727, 450);
+    ctx.fillText("Join Game", 1415, 850);
 
     //Version
-    ctx.font = "bold 16px Coming Soon";
+    ctx.font = "bold 32px Coming Soon";
     ctx.textAlign = "left";
-    ctx.fillText("v1.0.0", 5, 763);
+    ctx.fillText("v1.0.0", 10, 1434);
 
     //About
-    ctx.font = "bold 16px Coming Soon";
+    ctx.font = "bold 32px Coming Soon";
     ctx.textAlign = "right";
-    ctx.fillText("by Moshe Krumbein (outofink)", 1019, 763);
+    ctx.fillText("by Moshe Krumbein (outofink)", 1967, 1434);
 
     //Title
     ctx.fillStyle = '#7723B8';
-    ctx.font = "bold 108px Poiret One";
+    ctx.font = "bold 216px Poiret One";
     ctx.textAlign = "center";
-    ctx.fillText("Socket Pong", 512, 200);
+    ctx.fillText("Socket Pong", 988, 376);
 }
 function points() {
 	//clear canvas
@@ -442,9 +444,6 @@ canvas.addEventListener('touchstart', function() {
 	}
 	if (gameScreen && buttonCheck(touch.pageX, touch.pageY, 487, 359, 50, 50)) {
 	    activeBall = true;
-	}
-	if (mainScreen) {
-	    alert([touch.pageX, touch.pageY]);
 	}
     event.preventDefault();
 }, false);
