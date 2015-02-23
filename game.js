@@ -1,4 +1,4 @@
-var DEBUG = 1;
+var DEBUG = 0;
 
 if (DEBUG == 0) var socket = io.connect("https://socket-pong.herokuapp.com/");
 if (DEBUG == 1) var socket = io.connect("http://localhost"); //for testing
