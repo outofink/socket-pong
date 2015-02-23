@@ -39,6 +39,7 @@ socket.on('point', function(msg) {
     if (score == pointsChecked) {
         win = 1;
         overScreen = setScreen();
+        activeBall = true;
         socket.emit('win', [serverID, 1]);
     }
 });
@@ -67,6 +68,7 @@ socket.on('gameOver', function() {
     win = 1;
     forceEnd = true;
     overScreen = setScreen();
+    activeBall = true;
     ball = deadball;
     gameid = '';
     serverID = undefined;
@@ -156,6 +158,7 @@ function canUpdate() {
         if (theirScore == pointsChecked) {
             win = 0;
             overScreen = setScreen();
+            activeBall = true;
             socket.emit('win', [serverID, 0]);
         }
         onscreen = false;
@@ -215,7 +218,6 @@ canvas.addEventListener('touchmove', function() {
 
     if (gameScreen && paddleCheck(paddle.x/2, touch.pageX, paddle.w)) {
         var buffer = 40;
-        console.log(touch.pageX)
         if (((touch.pageX*2 - paddle.w / 2 - buffer) > 0) && ((touch.pageX*2 + paddle.w / 2 + buffer) < canvas.width)) {
             paddle.x = touch.pageX*2;
         } else if ((touch.pageX - paddle.w / 2 - buffer) <= 0) {
