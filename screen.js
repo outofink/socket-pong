@@ -230,7 +230,14 @@ function wait() {
     ctx.fillStyle = 'black';
     ctx.font = "216px Coming Soon";
     ctx.textAlign = "center";
-    ctx.fillText(("000"+serverID).slice(-4), 988, 470);
+    var printID;
+    if (serverID != '') {
+    	printID = ("000"+serverID).slice(-4)
+    }
+    else {
+    	printID = serverID;
+    }
+    ctx.fillText(printID, 988, 470);
     //"Wating for opponent"
     ctx.fillStyle = 'black';
     ctx.font = "96px Coming Soon";
@@ -254,49 +261,49 @@ function joining() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     //Dial
     ctx.fillStyle = 'black';
-    ctx.font = "64px Coming Soon";
+    ctx.font = "128px Coming Soon";
     ctx.textAlign = "center";
     var j = 0;
     for (i=1;i<10;i++) {
-    	ctx.fillText(i.toString(), 412+((i-1)%3)*100, 400+j*100);
+    	ctx.fillText(i.toString(), 788+((i-1)%3)*200, 752+j*200);
     	if (i%3==0) j++;
     }
-    ctx.fillText("0", 512, 700);
+    ctx.fillText("0", 988, 1352);
 	//"Game ID"
     ctx.fillStyle = 'black';
-    ctx.font = "64px Coming Soon";
+    ctx.font = "128px Coming Soon";
     ctx.textAlign = "center";
-    ctx.fillText("Enter Game ID:", 512, 125);
+    ctx.fillText("Enter Game ID:", 988, 235);
     //joinmsg
     ctx.fillStyle = 'red';
-    ctx.font = "32px Coming Soon";
+    ctx.font = "64px Coming Soon";
     ctx.textAlign = "center";
-    ctx.fillText(joinmsg, 512, 175);
+    ctx.fillText(joinmsg, 988, 329);
     //back
     if (gameid.length!=0) {
 	    ctx.fillStyle = 'black';
-	    ctx.font = "64px Coming Soon";
+	    ctx.font = "128px Coming Soon";
 	    ctx.textAlign = "center";
-	    ctx.fillText("←", 412, 695);
+	    ctx.fillText("←", 788, 1343);
 	}	
     //ok
     if (gameid.length==4) {
 	    ctx.beginPath();
-	    ctx.arc(612, 675, 30, Math.PI * 2, false);
-	    ctx.lineWidth = 5;
+	    ctx.arc(1188, 1305, 60, Math.PI * 2, false);
+	    ctx.lineWidth = 6;
 	    ctx.strokeStyle = 'black';
 	    ctx.stroke();
 
 	    ctx.fillStyle = 'black';
-	    ctx.font = "32px Coming Soon";
+	    ctx.font = "64px Coming Soon";
 	    ctx.textAlign = "center";
-	    ctx.fillText("OK", 612, 687);
+	    ctx.fillText("OK", 1188, 1328);
 	    gameidfull = true;
 	}
 	else gameidfull = false;
     //inputs
     ctx.fillStyle = 'black';
-    ctx.font = "108px Coming Soon";
+    ctx.font = "216px Coming Soon";
     ctx.textAlign = "center";
     String.prototype.repeat = function (n) {
 	    var str = '';
@@ -304,18 +311,18 @@ function joining() {
 	    return str;
 	};
     printid = (gameid+"_".repeat((4-gameid.length))).split('').join(' ');
-    ctx.fillText(printid, 512, 300);
+    ctx.fillText(printid, 988, 564);
     //back
     ctx.beginPath();
-    ctx.rect(5, 10, 100, 50);
+    ctx.rect(10, 19, 225, 100);
     ctx.lineWidth = 3;
     ctx.strokeStyle = 'black';
     ctx.stroke();
 
     ctx.fillStyle = 'black';
-    ctx.font = "24px Coming Soon";
+    ctx.font = "48px Coming Soon";
     ctx.textAlign = "left";
-    ctx.fillText("◀ BACK", 10, 45);
+    ctx.fillText("◀ BACK", 19, 85);
 }
 function over() {
 	//clear canvas
@@ -327,47 +334,47 @@ function over() {
     else if (win==0) msg = "You Lose!";
 
 	ctx.fillStyle = 'black';
-    ctx.font = "108px Coming Soon";
+    ctx.font = "216px Coming Soon";
     ctx.textAlign = "center";
-    ctx.fillText(msg, 512, 200);
+    ctx.fillText(msg, 988, 376);
     //check for forfeit
     if (forceEnd) {
 		ctx.fillStyle = 'red';
-	    ctx.font = "32px Coming Soon";
+	    ctx.font = "64px Coming Soon";
 	    ctx.textAlign = "center";
-	    ctx.fillText("(They forfeited)", 512, 250);
+	    ctx.fillText("(They forfeited)", 988, 470);
 	}
     //your points
     ctx.fillStyle = 'black';
-    ctx.font = "64px Coming Soon";
+    ctx.font = "128px Coming Soon";
     ctx.textAlign = "center";
-    ctx.fillText("You:", 320, 350);
+    ctx.fillText("You:", 604, 658);
     //their points
     ctx.fillStyle = 'black';
-    ctx.font = "64px Coming Soon";
+    ctx.font = "128px Coming Soon";
     ctx.textAlign = "center";
-    ctx.fillText("Other Guy:", 704, 350);
+    ctx.fillText("Other Guy:", 1372, 658);
     //your points actually
     ctx.fillStyle = 'black';
-    ctx.font = "96px Coming Soon";
+    ctx.font = "192px Coming Soon";
     ctx.textAlign = "center";
-    ctx.fillText(score, 320, 475);
+    ctx.fillText(score, 604, 917);
     //their points actually
     ctx.fillStyle = 'black';
-    ctx.font = "96px Coming Soon";
+    ctx.font = "192px Coming Soon";
     ctx.textAlign = "center";
-    ctx.fillText(theirScore, 704, 475);
-    //go back to Main Menu/dsiconnect
+    ctx.fillText(theirScore, 1372, 917);
+    //go back to Main Menu/disconnect
     ctx.beginPath();
-    ctx.rect(424, 600, 175, 50);
-    ctx.lineWidth = 5;
+    ctx.rect(838, 1128, 300, 100);
+    ctx.lineWidth = 6;
     ctx.strokeStyle = 'black';
     ctx.stroke();
 
     ctx.fillStyle = 'black';
-    ctx.font = "24px Coming Soon";
+    ctx.font = "48px Coming Soon";
     ctx.textAlign = "center";
-    ctx.fillText("MAIN MENU", 512, 635);
+    ctx.fillText("MAIN MENU", 988, 1194);
 }
 
 canvas.addEventListener('touchstart', function() {
@@ -397,30 +404,30 @@ canvas.addEventListener('touchstart', function() {
 	    waitScreen = setScreen();
 	    socket.emit('getRoom');
 	}
-	else if (waitScreen && buttonCheck(touch.pageX, touch.pageY, 424, 600, 175, 50)) {
+	else if (waitScreen && buttonCheck(touch.pageX, touch.pageY, 406, 564, 175, 50)) {
 	    mainScreen = setScreen();
 	    socket.emit('leaveRoom', true);
 	}
 	var j = 0;
 	for (i=1;i<10;i++) {
-		if (joinScreen && buttonCheck(touch.pageX, touch.pageY, 372+((i-1)%3)*100, 338+j*100, 75, 75)) setId(i);
+		if (joinScreen && buttonCheck(touch.pageX, touch.pageY, 356+((i-1)%3)*100, 337+j*100, 75, 75)) setId(i);
 		if (i%3==0) j++;
 	}
-	if (joinScreen && buttonCheck(touch.pageX, touch.pageY, 372, 638, 75, 75)) {
+	if (joinScreen && buttonCheck(touch.pageX, touch.pageY, 356, 637, 75, 75)) {
 	    setId(-1);
 	}
-	else if (joinScreen && buttonCheck(touch.pageX, touch.pageY, 472, 638, 75, 75)) {
+	else if (joinScreen && buttonCheck(touch.pageX, touch.pageY, 456, 637, 75, 75)) {
 	    setId(0)
 	}
-	else if (joinScreen && gameidfull && buttonCheck(touch.pageX, touch.pageY, 572, 638, 75, 75)) {
+	else if (joinScreen && gameidfull && buttonCheck(touch.pageX, touch.pageY, 556, 637, 75, 75)) {
 	    socket.emit('checkRoom', gameid);
 	}
-	else if (joinScreen && buttonCheck(touch.pageX, touch.pageY, 5, 10, 100, 50)) {
+	else if (joinScreen && buttonCheck(touch.pageX, touch.pageY, 5, 10, 113, 50)) {
 	    mainScreen = setScreen();
 	    joinmsg = '';
 	    gameid = '';
 	}
-	else if (gameScreen && buttonCheck(touch.pageX, touch.pageY, 910, 5, 100, 25)) {
+	else if (gameScreen && buttonCheck(touch.pageX, touch.pageY, 891, 5, 100, 25)) {
 	    mainScreen = setScreen();
 	    socket.emit('leaveRoom', false);
 	    win = -1
@@ -431,7 +438,7 @@ canvas.addEventListener('touchstart', function() {
 	    serverID = undefined;
 	    ball=deadball;
 	}
-	else if (overScreen && buttonCheck(touch.pageX, touch.pageY, 424, 600, 175, 50)) {
+	else if (overScreen && buttonCheck(touch.pageX, touch.pageY, 419, 564, 150, 50)) {
 	    mainScreen = setScreen();
 	    socket.emit('leaveRoom', true);
 	    win = -1
@@ -440,7 +447,7 @@ canvas.addEventListener('touchstart', function() {
 	    theirScore = 0;
 	    gameid = '';
 	    serverID = undefined;
-	    	    ball=deadball;
+	    ball=deadball;
 
 	}
 	else if (gameScreen && buttonCheck(touch.pageX, touch.pageY, 487, 359, 50, 50)) {
@@ -448,12 +455,6 @@ canvas.addEventListener('touchstart', function() {
 	}
     event.preventDefault();
 }, false);
-
-var fps = 60;
-var now;
-var then = Date.now();
-var interval = 1000 / fps;
-var delta;
 
 initCanvas()
 

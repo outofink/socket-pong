@@ -1,4 +1,4 @@
-var DEBUG = 0;
+var DEBUG = 1;
 
 if (DEBUG == 0) var socket = io.connect("https://socket-pong.herokuapp.com/");
 if (DEBUG == 1) var socket = io.connect("http://localhost"); //for testing
@@ -8,7 +8,7 @@ var theirScore = 0;
 
 var onscreen = false;
 
-var paddle = {x:512, y:675, w:250, h:25};
+var paddle = {x:988, y:1270, w:500, h:50};
 var canvas = document.getElementById("canvas");
 
 var deadball = {x:0, y:0, vx:0, vy:0, radius:0};
@@ -32,6 +32,7 @@ socket.on('send ball', function(msg) {
 socket.on('win', function(msg) {
     win = msg;
     overScreen = setScreen();
+    activeBall = true;
 });
 socket.on('point', function(msg) {
     score += 1;
@@ -95,7 +96,7 @@ function canDraw() {
         if (onscreen == false) {
             ctx.fillStyle = "red";
         }
-        ctx.font = "bold 16px Arial";
+        ctx.font = "16px Arial";
         ctx.textAlign = "left";
         ctx.fillText(JSON.stringify(ball), 50, canvas.height - 50);
     }
@@ -104,31 +105,31 @@ function canDraw() {
     ctx.fillRect(paddle.x - paddle.w / 2, paddle.y - paddle.h / 2, paddle.w, paddle.h);
     //score
     ctx.fillStyle = 'black';
-    ctx.font = "bold 72px Arial";
+    ctx.font = "144px Arial";
     ctx.textAlign = "left";
-    ctx.fillText(score, 25, 75);
+    ctx.fillText(score, 48, 141);
     //theirScore
-    ctx.font = "bold 32px Arial";
+    ctx.font = "66px Arial";
     ctx.textAlign = "left";
-    ctx.fillText(theirScore, 75, 50);
+    ctx.fillText(theirScore, 145, 94);
     //hudmsg
     if (!activeBall) {
         ctx.fillStyle = 'black';
-        ctx.font = "bold 64px Coming Soon";
+        ctx.font = "128px Coming Soon";
         ctx.textAlign = "center";
-        ctx.fillText("Touch ball to start", 512, 550);
+        ctx.fillText("Touch ball to start", 988, 1034);
     }
     //disconnect
     ctx.beginPath();
-    ctx.rect(910, 5, 100, 25);
+    ctx.rect(1781, 9, 200, 50);
     ctx.lineWidth = 3;
     ctx.strokeStyle = 'black';
     ctx.stroke();
 
     ctx.fillStyle = 'black';
-    ctx.font = "bold 16px Coming Soon";
+    ctx.font = "32px Coming Soon";
     ctx.textAlign = "center";
-    ctx.fillText("DISCONNECT", 960, 25);
+    ctx.fillText("DISCONNECT", 1881, 47);
 }
 
 function canUpdate() {
@@ -164,7 +165,6 @@ function canUpdate() {
     //hit the top 
     else if ((ball.y < -100) && (ball.vy < 0)) {
         //ball.y = -100;
-        console.log("thinga")
         if (onscreen) {
             socket.emit('send ball', [{
                 x: canvas.width - ball.x,
@@ -181,7 +181,7 @@ function canUpdate() {
 
     if (
       ((ball.y + ball.radius) - (paddle.y - paddle.h / 2) > 0) && // ball and paddle overlap on y-axis
-      (Math.abs(ball.x - paddle.x) <= paddle.w / 2 + 15) && // ball and paddle overlap on x-axis
+      (Math.abs(ball.x - paddle.x) <= paddle.w / 2 + ball.radius/2) && // ball and paddle overlap on x-axis
       ((ball.y + ball.radius) - (paddle.y - paddle.h / 2) < ball.radius) //not too overlapped
     ) { 
         ball.vy *= -1;
@@ -213,10 +213,11 @@ function canUpdate() {
 canvas.addEventListener('touchmove', function() {
     var touch = event.targetTouches[0];
 
-    if (gameScreen && paddleCheck(paddle.x, touch.pageX, paddle.w)) {
-        var buffer = 20;
-        if (((touch.pageX - paddle.w / 2 - buffer) > 0) && ((touch.pageX + paddle.w / 2 + buffer) < canvas.width)) {
-            paddle.x = touch.pageX;
+    if (gameScreen && paddleCheck(paddle.x/2, touch.pageX, paddle.w)) {
+        var buffer = 40;
+        console.log(touch.pageX)
+        if (((touch.pageX*2 - paddle.w / 2 - buffer) > 0) && ((touch.pageX*2 + paddle.w / 2 + buffer) < canvas.width)) {
+            paddle.x = touch.pageX*2;
         } else if ((touch.pageX - paddle.w / 2 - buffer) <= 0) {
             paddle.x = paddle.w / 2 + buffer;
         } else if ((touch.pageX + paddle.w / 2 + buffer) >= canvas.width) {

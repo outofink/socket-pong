@@ -2,7 +2,7 @@ now:
 DONE
 
 later:
-support other devices besides iPads (includes retina on ipads)
+support other devices besides iPads
 spectate? (airplaying this would be cool!) [this seems really hard]
 
 for claire:

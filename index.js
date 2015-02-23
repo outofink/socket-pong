@@ -41,11 +41,11 @@ io.on('connection', function(socket) {
             rooms[parseInt(msg)][1] = socket.id;
             socket.join(parseInt(msg));
             socket.broadcast.to(parseInt(msg)).emit('start');
-            socket.broadcast.to(parseInt(msg)).emit('send ball', [{x:512,y:384,vx:0,vy:-10,radius:35}, true]);
+            socket.broadcast.to(parseInt(msg)).emit('send ball', [{x:988,y:722,vx:0,vy:-20,radius:70}, true]);
         }
     });
     socket.on('point', function(msg) {
-	    socket.broadcast.to(parseInt(msg)).emit('send ball', [{x:512,y:384,vx:0,vy:-10,radius:35}, true]);
+	    socket.broadcast.to(parseInt(msg)).emit('send ball', [{x:988,y:722,vx:0,vy:-20,radius:70}, true]);
 	    socket.broadcast.to(parseInt(msg)).emit('point');
 	});
     socket.on('win', function(msg) {
@@ -64,8 +64,12 @@ io.on('connection', function(socket) {
     socket.on('disconnect', function() {
         oldRooms = Object.keys(io.sockets.adapter.rooms);
         for (i = 0; i < oldRooms.length; i++) {
-            if (oldRooms[i].toString().length<=4) {
-                socket.broadcast.to(oldRooms[i]).emit('gameOver', 'disconnect')
+            var clients = Object.keys(io.sockets.adapter.rooms[oldRooms[i]]); 
+            console.log(clients)
+            console.log(oldRooms)
+            if (oldRooms[i].toString().length<=4 && (socket.id in clients)) {
+                console.log(oldRooms[i].toString())
+                socket.to(oldRooms[i]).emit('gameOver', 'disconnect')
                 rooms[oldRooms[i]] = undefined;
                 socket.leave(oldRooms[i]);
             }
