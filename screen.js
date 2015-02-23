@@ -82,32 +82,32 @@ function mainMenu() {
     //"Create Game"
     ctx.beginPath();
     ctx.rect(236, 675, 700, 300);
-    ctx.lineWidth = 10;
+    ctx.lineWidth = 6;
     ctx.strokeStyle = 'black';
     ctx.stroke();
 
     ctx.fillStyle = 'black';
-    ctx.font = "bold 96px Coming Soon";
+    ctx.font = "96px Coming Soon";
     ctx.textAlign = "center";
     ctx.fillText("Create Game", 586, 850);
     //"Join Game"
     ctx.beginPath();
     ctx.rect(1065, 675, 700, 300);
-    ctx.lineWidth = 10;
+    ctx.lineWidth = 6;
     ctx.strokeStyle = 'black';
     ctx.stroke();
 
-    ctx.font = "bold 96px Coming Soon";
+    ctx.font = "96px Coming Soon";
     ctx.textAlign = "center";
     ctx.fillText("Join Game", 1415, 850);
 
     //Version
-    ctx.font = "bold 32px Coming Soon";
+    ctx.font = "32px Coming Soon";
     ctx.textAlign = "left";
     ctx.fillText("v1.0.1", 10, 1434);
 
     //About
-    ctx.font = "bold 32px Coming Soon";
+    ctx.font = "32px Coming Soon";
     ctx.textAlign = "right";
     ctx.fillText("by Moshe Krumbein (outofink)", 1967, 1434);
 
@@ -155,64 +155,64 @@ function points() {
     }
     //"Points to Win"
     ctx.fillStyle = 'black';
-    ctx.font = "bold 128px Coming Soon";
+    ctx.font = "128px Coming Soon";
     ctx.textAlign = "center";
     ctx.fillText("Points to win:", 988, 329);
     //"3"
     ctx.beginPath();
     ctx.rect(329, 423, 400, 400);
-    ctx.lineWidth = 10;
+    ctx.lineWidth = 6;
     ctx.strokeStyle = 'black';
     ctx.stroke();
 
     ctx.fillStyle = 'black';
-    ctx.font = "bold 168px Coming Soon";
+    ctx.font = "168px Coming Soon";
     ctx.textAlign = "center";
     ctx.fillText("3", 531, 688);
     //"5"
     ctx.beginPath();
     ctx.rect(795, 423, 400, 400);
-    ctx.lineWidth = 10;
+    ctx.lineWidth = 6;
     ctx.strokeStyle = 'black';
     ctx.stroke();
 
     ctx.fillStyle = 'black';
-    ctx.font = "bold 168px Coming Soon";
+    ctx.font = "168px Coming Soon";
     ctx.textAlign = "center";
     ctx.fillText("5", 988, 688);
 
     //"7"
     ctx.beginPath();
     ctx.rect(1253, 423, 400, 400);
-    ctx.lineWidth = 10;
+    ctx.lineWidth = 6;
     ctx.strokeStyle = 'black';
     ctx.stroke();
 
     ctx.fillStyle = 'black';
-    ctx.font = "bold 168px Coming Soon";
+    ctx.font = "168px Coming Soon";
     ctx.textAlign = "center";
     ctx.fillText("7", 1446, 688);
 
     //Create Game
     ctx.beginPath();
     ctx.rect(638, 962, 700, 200);
-    ctx.lineWidth = 10;
-    ctx.strokeStyle = 'black';
-    ctx.stroke();
-
-    ctx.fillStyle = 'black';
-    ctx.font = "bold 96px Coming Soon";
-    ctx.textAlign = "center";
-    ctx.fillText("Create Game", 988, 1100);
-    //back
-    ctx.beginPath();
-    ctx.rect(10, 19, 225, 100);
     ctx.lineWidth = 6;
     ctx.strokeStyle = 'black';
     ctx.stroke();
 
     ctx.fillStyle = 'black';
-    ctx.font = "bold 48px Coming Soon";
+    ctx.font = "96px Coming Soon";
+    ctx.textAlign = "center";
+    ctx.fillText("Create Game", 988, 1100);
+    //back
+    ctx.beginPath();
+    ctx.rect(10, 19, 225, 100);
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = 'black';
+    ctx.stroke();
+
+    ctx.fillStyle = 'black';
+    ctx.font = "48px Coming Soon";
     ctx.textAlign = "left";
     ctx.fillText("◀ BACK", 19, 85);
 }
@@ -223,30 +223,30 @@ function wait() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 	//"Game ID"
     ctx.fillStyle = 'black';
-    ctx.font = "bold 64px Coming Soon";
+    ctx.font = "128px Coming Soon";
     ctx.textAlign = "center";
-    ctx.fillText("Game ID:", 512, 125);
+    ctx.fillText("Game ID:", 988, 236);
     //the game id
     ctx.fillStyle = 'black';
-    ctx.font = "bold 108px Coming Soon";
+    ctx.font = "216px Coming Soon";
     ctx.textAlign = "center";
-    ctx.fillText(("000"+serverID).slice(-4), 512, 250);
+    ctx.fillText(("000"+serverID).slice(-4), 988, 470);
     //"Wating for opponent"
     ctx.fillStyle = 'black';
-    ctx.font = "bold 48px Coming Soon";
+    ctx.font = "96px Coming Soon";
     ctx.textAlign = "center";
-    ctx.fillText("Wating for opponent...", 512, 450);
+    ctx.fillText("Wating for opponent...", 988, 846);
     //disconnect
     ctx.beginPath();
-    ctx.rect(424, 600, 175, 50);
-    ctx.lineWidth = 5;
+    ctx.rect(813, 1128, 350, 100);
+    ctx.lineWidth = 3;
     ctx.strokeStyle = 'black';
     ctx.stroke();
 
     ctx.fillStyle = 'black';
-    ctx.font = "bold 24px Coming Soon";
+    ctx.font = "48px Coming Soon";
     ctx.textAlign = "center";
-    ctx.fillText("DISCONNECT", 512, 635);
+    ctx.fillText("DISCONNECT", 988, 1194);
 }
 function joining() {
 	//clear canvas
@@ -254,7 +254,7 @@ function joining() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     //Dial
     ctx.fillStyle = 'black';
-    ctx.font = "bold 64px Coming Soon";
+    ctx.font = "64px Coming Soon";
     ctx.textAlign = "center";
     var j = 0;
     for (i=1;i<10;i++) {
@@ -264,18 +264,18 @@ function joining() {
     ctx.fillText("0", 512, 700);
 	//"Game ID"
     ctx.fillStyle = 'black';
-    ctx.font = "bold 64px Coming Soon";
+    ctx.font = "64px Coming Soon";
     ctx.textAlign = "center";
     ctx.fillText("Enter Game ID:", 512, 125);
     //joinmsg
     ctx.fillStyle = 'red';
-    ctx.font = "bold 32px Coming Soon";
+    ctx.font = "32px Coming Soon";
     ctx.textAlign = "center";
     ctx.fillText(joinmsg, 512, 175);
     //back
     if (gameid.length!=0) {
 	    ctx.fillStyle = 'black';
-	    ctx.font = "bold 64px Coming Soon";
+	    ctx.font = "64px Coming Soon";
 	    ctx.textAlign = "center";
 	    ctx.fillText("←", 412, 695);
 	}	
@@ -288,7 +288,7 @@ function joining() {
 	    ctx.stroke();
 
 	    ctx.fillStyle = 'black';
-	    ctx.font = "bold 32px Coming Soon";
+	    ctx.font = "32px Coming Soon";
 	    ctx.textAlign = "center";
 	    ctx.fillText("OK", 612, 687);
 	    gameidfull = true;
@@ -296,7 +296,7 @@ function joining() {
 	else gameidfull = false;
     //inputs
     ctx.fillStyle = 'black';
-    ctx.font = "bold 108px Coming Soon";
+    ctx.font = "108px Coming Soon";
     ctx.textAlign = "center";
     String.prototype.repeat = function (n) {
 	    var str = '';
@@ -313,7 +313,7 @@ function joining() {
     ctx.stroke();
 
     ctx.fillStyle = 'black';
-    ctx.font = "bold 24px Coming Soon";
+    ctx.font = "24px Coming Soon";
     ctx.textAlign = "left";
     ctx.fillText("◀ BACK", 10, 45);
 }
@@ -327,34 +327,34 @@ function over() {
     else if (win==0) msg = "You Lose!";
 
 	ctx.fillStyle = 'black';
-    ctx.font = "bold 108px Coming Soon";
+    ctx.font = "108px Coming Soon";
     ctx.textAlign = "center";
     ctx.fillText(msg, 512, 200);
     //check for forfeit
     if (forceEnd) {
 		ctx.fillStyle = 'red';
-	    ctx.font = "bold 32px Coming Soon";
+	    ctx.font = "32px Coming Soon";
 	    ctx.textAlign = "center";
 	    ctx.fillText("(They forfeited)", 512, 250);
 	}
     //your points
     ctx.fillStyle = 'black';
-    ctx.font = "bold 64px Coming Soon";
+    ctx.font = "64px Coming Soon";
     ctx.textAlign = "center";
     ctx.fillText("You:", 320, 350);
     //their points
     ctx.fillStyle = 'black';
-    ctx.font = "bold 64px Coming Soon";
+    ctx.font = "64px Coming Soon";
     ctx.textAlign = "center";
     ctx.fillText("Other Guy:", 704, 350);
     //your points actually
     ctx.fillStyle = 'black';
-    ctx.font = "bold 96px Coming Soon";
+    ctx.font = "96px Coming Soon";
     ctx.textAlign = "center";
     ctx.fillText(score, 320, 475);
     //their points actually
     ctx.fillStyle = 'black';
-    ctx.font = "bold 96px Coming Soon";
+    ctx.font = "96px Coming Soon";
     ctx.textAlign = "center";
     ctx.fillText(theirScore, 704, 475);
     //go back to Main Menu/dsiconnect
@@ -365,7 +365,7 @@ function over() {
     ctx.stroke();
 
     ctx.fillStyle = 'black';
-    ctx.font = "bold 24px Coming Soon";
+    ctx.font = "24px Coming Soon";
     ctx.textAlign = "center";
     ctx.fillText("MAIN MENU", 512, 635);
 }
@@ -393,6 +393,7 @@ canvas.addEventListener('touchstart', function() {
 	    pointsChecked = 0;
 	}
 	else if (pointsScreen && buttonCheck(touch.pageX, touch.pageY, 337, 500, 350, 100)) {
+		serverID = ''
 	    waitScreen = setScreen();
 	    socket.emit('getRoom');
 	}
