@@ -427,7 +427,7 @@ canvas.addEventListener('touchstart', function() {
 	    joinmsg = '';
 	    gameid = '';
 	}
-	else if (gameScreen && buttonCheck(touch.pageX, touch.pageY, 891, 5, 100, 25)) {
+	else if (gameScreen && buttonCheck(touch.pageX, touch.pageY, 875, 10, 100, 25)) {
 	    mainScreen = setScreen();
 	    socket.emit('leaveRoom', false);
 	    win = -1

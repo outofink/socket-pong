@@ -121,7 +121,7 @@ function canDraw() {
     }
     //disconnect
     ctx.beginPath();
-    ctx.rect(1781, 9, 200, 50);
+    ctx.rect(1750, 20, 200, 50);
     ctx.lineWidth = 3;
     ctx.strokeStyle = 'black';
     ctx.stroke();
@@ -129,7 +129,7 @@ function canDraw() {
     ctx.fillStyle = 'black';
     ctx.font = "32px Coming Soon";
     ctx.textAlign = "center";
-    ctx.fillText("DISCONNECT", 1881, 47);
+    ctx.fillText("DISCONNECT", 1850, 60);
 }
 
 function canUpdate() {
