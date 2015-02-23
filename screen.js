@@ -63,7 +63,7 @@ function loading() {
     //Hack to preload fonts    
     ctx.font = "0px Coming Soon";
     ctx.fillText("", 0, 0);
-    ctx.font = "0px Poiret One";
+    ctx.font = "0px Josefin Sans";
     ctx.fillText("", 0, 0);
     //Loading screen
     ctx.fillStyle = 'black';
@@ -113,7 +113,7 @@ function mainMenu() {
 
     //Title
     ctx.fillStyle = '#7723B8';
-    ctx.font = "bold 216px Poiret One";
+    ctx.font = "216px Josefin Sans";
     ctx.textAlign = "center";
     ctx.fillText("Socket Pong", 988, 376);
 }
