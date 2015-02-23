@@ -17,7 +17,7 @@ var joinmsg = '';
 function initCanvas() {
     var ctx = canvas.getContext('2d');
 
-    //var W = window.innerWidth;   //not actuall true
+    //var W = window.innerWidth;   //not actually true
     //var H = window.innerHeight;
     var W = 988;   //experimentally found
     var H = 720;
@@ -89,7 +89,7 @@ function mainMenu() {
     ctx.fillStyle = 'black';
     ctx.font = "96px Coming Soon";
     ctx.textAlign = "center";
-    ctx.fillText("Create Game", 586, 850);
+    ctx.fillText("Start Game", 586, 850);
     //"Join Game"
     ctx.beginPath();
     ctx.rect(1065, 675, 700, 300);
@@ -203,7 +203,7 @@ function points() {
     ctx.fillStyle = 'black';
     ctx.font = "96px Coming Soon";
     ctx.textAlign = "center";
-    ctx.fillText("Create Game", 988, 1100);
+    ctx.fillText("Start Game", 988, 1100);
     //back
     ctx.beginPath();
     ctx.rect(10, 19, 225, 100);
