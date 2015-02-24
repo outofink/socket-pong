@@ -104,7 +104,7 @@ function mainMenu() {
     //Version
     ctx.font = "32px Coming Soon";
     ctx.textAlign = "left";
-    ctx.fillText("v1.0.1", 10, 1434);
+    ctx.fillText("v1.0.3", 10, 1434);
 
     //About
     ctx.font = "32px Coming Soon";

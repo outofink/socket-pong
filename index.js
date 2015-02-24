@@ -41,6 +41,7 @@ io.on('connection', function(socket) {
             rooms[parseInt(msg)][1] = socket.id;
             socket.join(parseInt(msg));
             socket.broadcast.to(parseInt(msg)).emit('start');
+            console.log("Created game with PIN "+ msg);
             socket.broadcast.to(parseInt(msg)).emit('send ball', [{x:988,y:722,vx:0,vy:-20,radius:70}, true]);
         }
     });
@@ -54,24 +55,26 @@ io.on('connection', function(socket) {
     socket.on('leaveRoom', function(msg) {
         oldRooms = Object.keys(io.sockets.adapter.rooms);
         for (i = 0; i < oldRooms.length; i++) {
-            if (oldRooms[i].toString().length<=4) {
-                if (!msg) socket.broadcast.to(oldRooms[i]).emit('gameOver', 'disconnect')
-                rooms[oldRooms[i]] = undefined;
-                socket.leave(oldRooms[i]);
+            if (oldRooms[i].toString().length <= 4 && rooms[oldRooms[i]] != undefined) {
+                if (rooms[oldRooms[i]].indexOf(socket.id) >= 0) {
+                    if (!msg) socket.broadcast.to(oldRooms[i]).emit('gameOver', 'disconnect')
+                    rooms[oldRooms[i]] = undefined;
+                    socket.leave(oldRooms[i]);
+                    console.log("Left game with PIN "+ oldRooms[i]);
+                }
             }
         }
     });
     socket.on('disconnect', function() {
         oldRooms = Object.keys(io.sockets.adapter.rooms);
         for (i = 0; i < oldRooms.length; i++) {
-            var clients = Object.keys(io.sockets.adapter.rooms[oldRooms[i]]); 
-            console.log(clients)
-            console.log(oldRooms)
-            if (oldRooms[i].toString().length<=4 && (socket.id in clients)) {
-                console.log(oldRooms[i].toString())
-                socket.to(oldRooms[i]).emit('gameOver', 'disconnect')
-                rooms[oldRooms[i]] = undefined;
-                socket.leave(oldRooms[i]);
+            if (oldRooms[i].toString().length <= 4 && rooms[oldRooms[i]] != undefined) {
+                if ((rooms[oldRooms[i]].indexOf(socket.id) >= 0)) {
+                    socket.to(oldRooms[i]).emit('gameOver', 'disconnect');
+                    rooms[oldRooms[i]] = undefined;
+                    socket.leave(oldRooms[i]);
+                    console.log("Disconnected game with PIN "+ oldRooms[i]);
+                }
             }
         }
         console.log("client disconnected");
