@@ -450,7 +450,7 @@ canvas.addEventListener('touchstart', function() {
 	    ball=deadball;
 
 	}
-	else if (gameScreen && buttonCheck(touch.pageX, touch.pageY, 487, 359, 50, 50)) {
+	else if (gameScreen && buttonCheck(touch.pageX, touch.pageY, 439, 326, 70, 70)) {
 	    activeBall = true;
 	}
     event.preventDefault();
