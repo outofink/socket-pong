@@ -1,10 +1,9 @@
 now:
-DONE
+Randomly connect to player online (possible username input?) [from shai]
+"Play Again" button after the game ends [from shai]
 
 later:
 support other devices besides iPads
-spectate? (airplaying this would be cool!) [this seems really hard]
-
-for claire:
-confetti on win
-moo on win
+spectate? (airplaying this would be cool, but seems really hard)
+confetti on win [from claire]
+moo on win [from claire]
