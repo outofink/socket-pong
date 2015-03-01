@@ -81,7 +81,7 @@ function mainMenu() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     //"Create Game"
     ctx.beginPath();
-    ctx.rect(236, 675, 700, 300);
+    ctx.rect(263, 550, 700, 300);
     ctx.lineWidth = 6;
     ctx.strokeStyle = 'black';
     ctx.stroke();
@@ -89,17 +89,40 @@ function mainMenu() {
     ctx.fillStyle = 'black';
     ctx.font = "96px Coming Soon";
     ctx.textAlign = "center";
-    ctx.fillText("Start Game", 586, 850);
+    ctx.fillText("Start Game", 613, 732);
+
     //"Join Game"
     ctx.beginPath();
-    ctx.rect(1065, 675, 700, 300);
+    ctx.rect(1013, 550, 700, 300);
     ctx.lineWidth = 6;
     ctx.strokeStyle = 'black';
     ctx.stroke();
 
     ctx.font = "96px Coming Soon";
     ctx.textAlign = "center";
-    ctx.fillText("Join Game", 1415, 850);
+    ctx.fillText("Join Game", 1363, 732);
+
+    //"???"
+    ctx.beginPath();
+    ctx.rect(263, 900, 700, 300);
+    ctx.lineWidth = 6;
+    ctx.strokeStyle = 'black';
+    ctx.stroke();
+
+    ctx.fillStyle = 'black';
+    ctx.font = "96px Coming Soon";
+    ctx.textAlign = "center";
+    ctx.fillText("???", 613, 1082);
+    //"???"
+    ctx.beginPath();
+    ctx.rect(1013, 900, 700, 300);
+    ctx.lineWidth = 6;
+    ctx.strokeStyle = 'black';
+    ctx.stroke();
+
+    ctx.font = "96px Coming Soon";
+    ctx.textAlign = "center";
+    ctx.fillText("???", 1363, 1082);
 
     //Version
     ctx.font = "32px Coming Soon";
@@ -115,7 +138,7 @@ function mainMenu() {
     ctx.fillStyle = '#7723B8';
     ctx.font = "216px Josefin Sans";
     ctx.textAlign = "center";
-    ctx.fillText("Socket Pong", 988, 376);
+    ctx.fillText("Socket Pong", 988, 350);
 }
 function points() {
 	//clear canvas
@@ -379,11 +402,18 @@ function over() {
 
 canvas.addEventListener('touchstart', function() {
 	var touch = event.targetTouches[0];
-	if (mainScreen && buttonCheck(touch.pageX, touch.pageY, 118, 338, 350, 150)) {
+
+    var j = 0;
+    for (i=1;i<10;i++) {
+        if (joinScreen && buttonCheck(touch.pageX, touch.pageY, 356+((i-1)%3)*100, 337+j*100, 75, 75)) setId(i);
+        if (i%3==0) j++;
+    }
+
+	if (mainScreen && buttonCheck(touch.pageX, touch.pageY, 132, 275, 350, 150)) {
 		pointsChecked = 3;
 	    pointsScreen = setScreen();
 	}
-	else if (mainScreen && buttonCheck(touch.pageX, touch.pageY, 535, 338, 350, 150)) {
+	else if (mainScreen && buttonCheck(touch.pageX, touch.pageY, 507, 275, 350, 150)) {
 	    joinScreen = setScreen();
 	}
 	else if (pointsScreen && buttonCheck(touch.pageX, touch.pageY, 165, 212, 200, 200)) {
@@ -408,12 +438,8 @@ canvas.addEventListener('touchstart', function() {
 	    mainScreen = setScreen();
 	    socket.emit('leaveRoom', true);
 	}
-	var j = 0;
-	for (i=1;i<10;i++) {
-		if (joinScreen && buttonCheck(touch.pageX, touch.pageY, 356+((i-1)%3)*100, 337+j*100, 75, 75)) setId(i);
-		if (i%3==0) j++;
-	}
-	if (joinScreen && buttonCheck(touch.pageX, touch.pageY, 356, 637, 75, 75)) {
+	
+	else if (joinScreen && buttonCheck(touch.pageX, touch.pageY, 356, 637, 75, 75)) {
 	    setId(-1);
 	}
 	else if (joinScreen && buttonCheck(touch.pageX, touch.pageY, 456, 637, 75, 75)) {
