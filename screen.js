@@ -261,11 +261,11 @@ function wait() {
     	printID = serverID;
     }
     ctx.fillText(printID, 988, 470);
-    //"Wating for opponent"
+    //"Waiting for opponent"
     ctx.fillStyle = 'black';
     ctx.font = "96px Coming Soon";
     ctx.textAlign = "center";
-    ctx.fillText("Wating for opponent...", 988, 846);
+    ctx.fillText("Waiting for opponent...", 988, 846);
     //disconnect
     ctx.beginPath();
     ctx.rect(813, 1128, 350, 100);
