@@ -7,3 +7,4 @@ support other devices besides iPads
 spectate? (airplaying this would be cool, but seems really hard)
 confetti on win [from claire]
 moo on win [from claire]
+settings screen (set name, change paddle and ball style, stats)

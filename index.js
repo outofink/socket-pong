@@ -4,6 +4,7 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
 var rooms = [];
+var points = [];
 
 function createRoom() {
     var room = parseInt(Math.random() * 10000)
@@ -23,9 +24,10 @@ io.on('connection', function(socket) {
     socket.on('send ball', function(msg) {
         socket.broadcast.to(parseInt(msg[2])).emit('send ball', [msg[0], msg[1]]);
     });
-    socket.on('getRoom', function() {
-        var room =createRoom();
+    socket.on('getRoom', function(msg) {
+        var room = createRoom();
         rooms[room]= [socket.id];
+        points[room] = msg;
         socket.join(room);
         socket.emit('getRoom', room)
     });
@@ -37,7 +39,7 @@ io.on('connection', function(socket) {
             socket.emit('checkRoom', "Game is already full")
         }
         else {
-            socket.emit('checkRoom', "success");
+            socket.emit('checkRoom', ["success", points[parseInt(msg)]]);
             rooms[parseInt(msg)][1] = socket.id;
             socket.join(parseInt(msg));
             socket.broadcast.to(parseInt(msg)).emit('start');
@@ -59,6 +61,7 @@ io.on('connection', function(socket) {
                 if (rooms[oldRooms[i]].indexOf(socket.id) >= 0) {
                     if (!msg) socket.broadcast.to(oldRooms[i]).emit('gameOver', 'disconnect')
                     rooms[oldRooms[i]] = undefined;
+                    points[oldRooms[i]] = undefined;
                     socket.leave(oldRooms[i]);
                     console.log("Left game with PIN "+ oldRooms[i]);
                 }
@@ -72,6 +75,7 @@ io.on('connection', function(socket) {
                 if ((rooms[oldRooms[i]].indexOf(socket.id) >= 0)) {
                     socket.to(oldRooms[i]).emit('gameOver', 'disconnect');
                     rooms[oldRooms[i]] = undefined;
+                    points[oldRooms[i]] = undefined;
                     socket.leave(oldRooms[i]);
                     console.log("Disconnected game with PIN "+ oldRooms[i]);
                 }

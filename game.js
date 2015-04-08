@@ -47,13 +47,14 @@ socket.on('msg', function(msg) {
     console.log(msg);
 });
 socket.on('checkRoom', function(msg) {
-    if (msg != "success") {
+    if (msg[0] != "success") {
         joinmsg = msg;
         gameid = '';
     }
     else {
         serverID = gameid;
         var activeBall = true;
+        pointsChecked = msg[1];
         gameScreen = setScreen();
     }
 });
@@ -65,13 +66,15 @@ socket.on('start', function() {
     gameScreen = setScreen();
 });
 socket.on('gameOver', function() {
-    win = 1;
-    forceEnd = true;
-    overScreen = setScreen();
-    activeBall = true;
-    ball = deadball;
-    gameid = '';
-    serverID = undefined;
+    if (!overScreen) {
+        win = 1;
+        forceEnd = true;
+        overScreen = setScreen();
+        activeBall = true;
+        ball = deadball;
+        gameid = '';
+        serverID = undefined;
+    }
 });
 
 //Very simple detection, could use distance between two points, or more complex polygonal bounding boxes
@@ -80,6 +83,17 @@ function paddleCheck(x1, x2, w) {
     return true;
 }
 function buttonCheck(x1, y1, x2, y2, w, h) {
+    if ((Math.abs((x2+w/2) - x1) > w / 2) || (Math.abs((y2+h/2) - y1) > h / 2)) return false;
+    return true;
+}
+function buttonCheckN(x1, y1, x2, y2, w, h) {
+    height = canvas.height*(.8)
+    width = height*(3/2)
+    x2 = (x2*width + (canvas.width-width)/2) / window.devicePixelRatio
+    y2 = (y2*height + (canvas.height-height)/2) / window.devicePixelRatio
+    w = w * width / window.devicePixelRatio
+    h = h * height / window.devicePixelRatio
+
     if ((Math.abs((x2+w/2) - x1) > w / 2) || (Math.abs((y2+h/2) - y1) > h / 2)) return false;
     return true;
 }
@@ -132,6 +146,18 @@ function canDraw() {
     ctx.font = "32px Coming Soon";
     ctx.textAlign = "center";
     ctx.fillText("DISCONNECT", 1850, 60);
+
+    //other guy
+    ctx.fillStyle = 'black';
+    ctx.font = "48px Coming Soon";
+    ctx.textAlign = "center";
+    ctx.fillText("You VS Other Guy", 988, 80);
+
+    //points
+    ctx.fillStyle = 'black';
+    ctx.font = "24px Coming Soon";
+    ctx.textAlign = "center";
+    ctx.fillText("Playing to " + pointsChecked, 1850, 100);
 }
 
 function canUpdate() {

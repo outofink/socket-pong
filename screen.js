@@ -17,10 +17,8 @@ var joinmsg = '';
 function initCanvas() {
     var ctx = canvas.getContext('2d');
 
-    //var W = window.innerWidth;   //not actually true
-    //var H = window.innerHeight;
-    var W = 988;   //experimentally found
-    var H = 720;
+    var W = window.innerWidth;
+    var H = window.innerHeight;
     canvas.width = W;
     canvas.height = H;
     canvas.style.width = W;
@@ -37,12 +35,12 @@ function initCanvas() {
 }
 
 function setId(val) {
-	joinmsg = '';
-	if (val == -1) {
-		gameid = gameid.slice(0, - 1);
-	}
-	else if (gameid.length < 4)
-		gameid+=val.toString();
+    joinmsg = '';
+    if (val == -1) {
+        gameid = gameid.slice(0, - 1);
+    }
+    else if (gameid.length < 4)
+        gameid += val.toString();
 }
 
 function setScreen() {
@@ -56,6 +54,28 @@ function setScreen() {
 
     return true
 }
+//scaling functions
+function scaleRect(ctx, x, y, w, h) { //.5, .7, .15, .7
+    height = canvas.height*(.8)
+    width = height*(3/2)
+    xNew = x*width + (canvas.width-width)/2
+    yNew = y*height + (canvas.height-height)/2
+    wNew = w * width
+    hNew = h * height
+    return ctx.rect(xNew, yNew, wNew, hNew)
+}
+function scaleText(ctx, text, x, y) {
+    height = canvas.height*(.8)
+    width = height*(3/2)
+    xNew = x*width + (canvas.width-width)/2
+    yNew = y*height + (canvas.height-height)/2
+    return ctx.fillText(text, xNew, yNew)
+}
+function scaleFont(ctx, size, other) {
+    height = canvas.height*(.8)
+    sizeNew = size * height
+    return ctx.font = sizeNew + "px " + other
+}
 
 function loading() {
     var ctx = canvas.getContext('2d');
@@ -67,9 +87,9 @@ function loading() {
     ctx.fillText("", 0, 0);
     //Loading screen
     ctx.fillStyle = 'black';
-    ctx.font = "216px Arial";
     ctx.textAlign = "center";
-    ctx.fillText("Loading", 988, 797);
+    scaleFont(ctx, .196 ,"Arial")
+    ctx.fillText("Loading", canvas.width/2, canvas.height/2);
     setTimeout(function() {
         mainScreen = setScreen();
     }, 1250);
@@ -79,88 +99,100 @@ function mainMenu() {
     //clear canvas
     var ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    //"Create Game"
-    ctx.beginPath();
-    ctx.rect(263, 550, 700, 300);
-    ctx.lineWidth = 6;
+    ctx.lineWidth = .004 * canvas.height
     ctx.strokeStyle = 'black';
+    ctx.fillStyle = 'black';
+
+    //"Start Game"
+    ctx.beginPath();
+    scaleRect(ctx, .060, .345, .424, .273)
     ctx.stroke();
 
-    ctx.fillStyle = 'black';
-    ctx.font = "96px Coming Soon";
     ctx.textAlign = "center";
-    ctx.fillText("Start Game", 613, 732);
+    scaleFont(ctx, .087, "Coming Soon")
+    scaleText(ctx, "Start Game", .272, .511)
 
     //"Join Game"
     ctx.beginPath();
-    ctx.rect(1013, 550, 700, 300);
-    ctx.lineWidth = 6;
-    ctx.strokeStyle = 'black';
+    scaleRect(ctx, .515, .345, .424, .273)
     ctx.stroke();
 
-    ctx.font = "96px Coming Soon";
-    ctx.textAlign = "center";
-    ctx.fillText("Join Game", 1363, 732);
+    scaleFont(ctx, .087, "Coming Soon")
+    scaleText(ctx, "Join Game", .727, .511)
 
     //"???"
     ctx.beginPath();
-    ctx.rect(263, 900, 700, 300);
-    ctx.lineWidth = 6;
-    ctx.strokeStyle = 'black';
+    scaleRect(ctx, .060, .664, .424, .273)
     ctx.stroke();
 
-    ctx.fillStyle = 'black';
-    ctx.font = "96px Coming Soon";
-    ctx.textAlign = "center";
-    ctx.fillText("???", 613, 1082);
+    scaleFont(ctx, .087, "Coming Soon")
+    scaleText(ctx, "???", .272, .829)
+
     //"???"
     ctx.beginPath();
-    ctx.rect(1013, 900, 700, 300);
-    ctx.lineWidth = 6;
-    ctx.strokeStyle = 'black';
+    scaleRect(ctx, .515, .664, .424, .273)
     ctx.stroke();
 
-    ctx.font = "96px Coming Soon";
-    ctx.textAlign = "center";
-    ctx.fillText("???", 1363, 1082);
+    scaleFont(ctx, .087, "Coming Soon")
+    scaleText(ctx, "???", .727, .829)
 
-    //Version
-    ctx.font = "32px Coming Soon";
+    //Version;
     ctx.textAlign = "left";
-    ctx.fillText("v1.0.4", 10, 1434);
+    scaleFont(ctx, .029, "Coming Soon")
+    ctx.fillText("v1.1.0", 10, canvas.height-10);
 
     //About
-    ctx.font = "32px Coming Soon";
     ctx.textAlign = "right";
-    ctx.fillText("by Moshe Krumbein (outofink)", 1967, 1434);
+    scaleFont(ctx, .029, "Coming Soon")
+    ctx.fillText("by Moshe Krumbein (outofink)", canvas.width-10, canvas.height-10);
 
     //Title
     ctx.fillStyle = '#7723B8';
-    ctx.font = "216px Josefin Sans";
     ctx.textAlign = "center";
-    ctx.fillText("Socket Pong", 988, 350);
+    scaleFont(ctx, .196 ,"Josefin Sans")
+    scaleText(ctx, "Socket Pong", .506, .164)
+
+    // //old bounds
+    // height = 550
+    // xoff = -40
+    // yoff = -50
+
+    // ctx.beginPath();
+    // ctx.rect(((1024*2)-(height*2*(3/2)))/2 + xoff, ((768*2)-(height*2))/2 + yoff, height*2*(3/2), height*2);
+    // ctx.strokeStyle = 'blue';
+    // ctx.stroke();
+    // ctx.closePath()
+
+    // //new bounds
+    // height = canvas.height*(.8)
+    // ctx.beginPath();
+    // ctx.rect((canvas.width-height*(3/2))/2, (canvas.height-height)/2, height*(3/2), height);
+    // ctx.strokeStyle = 'red';
+    // ctx.stroke();
+    // ctx.closePath()
 }
+
 function points() {
-	//clear canvas
+    //clear canvas
     var ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     //check
     ctx.fillStyle = 'lime';
     ctx.beginPath();
     if (pointsChecked == 3) {
-    	ctx.moveTo(529,823);
-    	ctx.lineTo(729,823);
-    	ctx.lineTo(729,623);
+        ctx.moveTo(529,823);
+        ctx.lineTo(729,823);
+        ctx.lineTo(729,623);
     }
     else if (pointsChecked == 5) {
-    	ctx.moveTo(995,823);
-    	ctx.lineTo(1195,823);
-    	ctx.lineTo(1195,623);
+        ctx.moveTo(995,823);
+        ctx.lineTo(1195,823);
+        ctx.lineTo(1195,623);
     }
     else if (pointsChecked == 7) {
-    	ctx.moveTo(1453,823);
-    	ctx.lineTo(1653,823);
-    	ctx.lineTo(1653,623);
+        ctx.moveTo(1453,823);
+        ctx.lineTo(1653,823);
+        ctx.lineTo(1653,623);
     }
     ctx.fill();
 
@@ -168,13 +200,13 @@ function points() {
     ctx.font = "108px Arial";
     ctx.textAlign = "center";
     if (pointsChecked == 3) {
-    	ctx.fillText("✓", 662, 790);
+        ctx.fillText("✓", 662, 790);
     }
     else if (pointsChecked == 5) {
-    	ctx.fillText("✓", 1119, 790);
+        ctx.fillText("✓", 1119, 790);
     }
     else if (pointsChecked == 7) {
-    	ctx.fillText("✓", 1577, 790);
+        ctx.fillText("✓", 1577, 790);
     }
     //"Points to Win"
     ctx.fillStyle = 'black';
@@ -241,10 +273,10 @@ function points() {
 }
 
 function wait() {
-	//clear canvas
+    //clear canvas
     var ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-	//"Game ID"
+    //"Game ID"
     ctx.fillStyle = 'black';
     ctx.font = "128px Coming Soon";
     ctx.textAlign = "center";
@@ -255,10 +287,10 @@ function wait() {
     ctx.textAlign = "center";
     var printID;
     if (serverID != '') {
-    	printID = ("000"+serverID).slice(-4)
+        printID = ("000"+serverID).slice(-4)
     }
     else {
-    	printID = serverID;
+        printID = serverID;
     }
     ctx.fillText(printID, 988, 470);
     //"Waiting for opponent"
@@ -279,7 +311,7 @@ function wait() {
     ctx.fillText("DISCONNECT", 988, 1194);
 }
 function joining() {
-	//clear canvas
+    //clear canvas
     var ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     //Dial
@@ -288,11 +320,11 @@ function joining() {
     ctx.textAlign = "center";
     var j = 0;
     for (i=1;i<10;i++) {
-    	ctx.fillText(i.toString(), 788+((i-1)%3)*200, 752+j*200);
-    	if (i%3==0) j++;
+        ctx.fillText(i.toString(), 788+((i-1)%3)*200, 752+j*200);
+        if (i%3==0) j++;
     }
     ctx.fillText("0", 988, 1352);
-	//"Game ID"
+    //"Game ID"
     ctx.fillStyle = 'black';
     ctx.font = "128px Coming Soon";
     ctx.textAlign = "center";
@@ -304,35 +336,35 @@ function joining() {
     ctx.fillText(joinmsg, 988, 329);
     //back
     if (gameid.length!=0) {
-	    ctx.fillStyle = 'black';
-	    ctx.font = "128px Coming Soon";
-	    ctx.textAlign = "center";
-	    ctx.fillText("←", 788, 1343);
-	}	
+        ctx.fillStyle = 'black';
+        ctx.font = "128px Coming Soon";
+        ctx.textAlign = "center";
+        ctx.fillText("←", 788, 1343);
+    }   
     //ok
     if (gameid.length==4) {
-	    ctx.beginPath();
-	    ctx.arc(1188, 1305, 60, Math.PI * 2, false);
-	    ctx.lineWidth = 6;
-	    ctx.strokeStyle = 'black';
-	    ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(1188, 1305, 60, Math.PI * 2, false);
+        ctx.lineWidth = 6;
+        ctx.strokeStyle = 'black';
+        ctx.stroke();
 
-	    ctx.fillStyle = 'black';
-	    ctx.font = "64px Coming Soon";
-	    ctx.textAlign = "center";
-	    ctx.fillText("OK", 1188, 1328);
-	    gameidfull = true;
-	}
-	else gameidfull = false;
+        ctx.fillStyle = 'black';
+        ctx.font = "64px Coming Soon";
+        ctx.textAlign = "center";
+        ctx.fillText("OK", 1188, 1328);
+        gameidfull = true;
+    }
+    else gameidfull = false;
     //inputs
     ctx.fillStyle = 'black';
     ctx.font = "216px Coming Soon";
     ctx.textAlign = "center";
     String.prototype.repeat = function (n) {
-	    var str = '';
-	    for(var i = 0; i < n; i++) { str += this; }
-	    return str;
-	};
+        var str = '';
+        for(var i = 0; i < n; i++) { str += this; }
+        return str;
+    };
     printid = (gameid+"_".repeat((4-gameid.length))).split('').join(' ');
     ctx.fillText(printid, 988, 564);
     //back
@@ -348,7 +380,7 @@ function joining() {
     ctx.fillText("◀ BACK", 19, 85);
 }
 function over() {
-	//clear canvas
+    //clear canvas
     var ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     //You Win/Lose/Tie
@@ -356,17 +388,17 @@ function over() {
     if (win==1) msg = "You Win!";
     else if (win==0) msg = "You Lose!";
 
-	ctx.fillStyle = 'black';
+    ctx.fillStyle = 'black';
     ctx.font = "216px Coming Soon";
     ctx.textAlign = "center";
     ctx.fillText(msg, 988, 376);
     //check for forfeit
     if (forceEnd) {
-		ctx.fillStyle = 'red';
-	    ctx.font = "64px Coming Soon";
-	    ctx.textAlign = "center";
-	    ctx.fillText("(They forfeited)", 988, 470);
-	}
+        ctx.fillStyle = 'red';
+        ctx.font = "64px Coming Soon";
+        ctx.textAlign = "center";
+        ctx.fillText("(They forfeited)", 988, 470);
+    }
     //your points
     ctx.fillStyle = 'black';
     ctx.font = "128px Coming Soon";
@@ -389,19 +421,32 @@ function over() {
     ctx.fillText(theirScore, 1372, 917);
     //go back to Main Menu/disconnect
     ctx.beginPath();
-    ctx.rect(838, 1128, 300, 100);
+    ctx.rect(863, 1203, 250, 75);
     ctx.lineWidth = 6;
     ctx.strokeStyle = 'black';
     ctx.stroke();
 
     ctx.fillStyle = 'black';
-    ctx.font = "48px Coming Soon";
+    ctx.font = "32px Coming Soon";
     ctx.textAlign = "center";
-    ctx.fillText("MAIN MENU", 988, 1194);
+    ctx.fillText("MAIN MENU", 988, 1252);
+
+    // Coming Soon!
+    // //Play again
+    // ctx.beginPath();
+    // ctx.rect(688, 1028, 600, 150);
+    // ctx.lineWidth = 6;
+    // ctx.strokeStyle = 'black';
+    // ctx.stroke();
+
+    // ctx.fillStyle = 'black';
+    // ctx.font = "96px Coming Soon";
+    // ctx.textAlign = "center";
+    // ctx.fillText("Play Again", 988, 1127);
 }
 
-canvas.addEventListener('touchstart', function() {
-	var touch = event.targetTouches[0];
+canvas.addEventListener('touchstart', function(event) {
+    var touch = event.targetTouches[0];
 
     var j = 0;
     for (i=1;i<10;i++) {
@@ -409,76 +454,76 @@ canvas.addEventListener('touchstart', function() {
         if (i%3==0) j++;
     }
 
-	if (mainScreen && buttonCheck(touch.pageX, touch.pageY, 132, 275, 350, 150)) {
-		pointsChecked = 3;
-	    pointsScreen = setScreen();
-	}
-	else if (mainScreen && buttonCheck(touch.pageX, touch.pageY, 507, 275, 350, 150)) {
-	    joinScreen = setScreen();
-	}
-	else if (pointsScreen && buttonCheck(touch.pageX, touch.pageY, 165, 212, 200, 200)) {
-	    pointsChecked = 3;
-	}
-	else if (pointsScreen && buttonCheck(touch.pageX, touch.pageY, 398, 212, 200, 200)) {
-	    pointsChecked = 5;
-	}
-	else if (pointsScreen && buttonCheck(touch.pageX, touch.pageY, 627, 212, 200, 200)) {
-	    pointsChecked = 7;
-	}
-	else if (pointsScreen && buttonCheck(touch.pageX, touch.pageY, 5, 10, 113, 50)) {
-	    mainScreen = setScreen();
-	    pointsChecked = 0;
-	}
-	else if (pointsScreen && buttonCheck(touch.pageX, touch.pageY, 337, 500, 350, 100)) {
-		serverID = ''
-	    waitScreen = setScreen();
-	    socket.emit('getRoom');
-	}
-	else if (waitScreen && buttonCheck(touch.pageX, touch.pageY, 406, 564, 175, 50)) {
-	    mainScreen = setScreen();
-	    socket.emit('leaveRoom', true);
-	}
-	
-	else if (joinScreen && buttonCheck(touch.pageX, touch.pageY, 356, 637, 75, 75)) {
-	    setId(-1);
-	}
-	else if (joinScreen && buttonCheck(touch.pageX, touch.pageY, 456, 637, 75, 75)) {
-	    setId(0)
-	}
-	else if (joinScreen && gameidfull && buttonCheck(touch.pageX, touch.pageY, 556, 637, 75, 75)) {
-	    socket.emit('checkRoom', gameid);
-	}
-	else if (joinScreen && buttonCheck(touch.pageX, touch.pageY, 5, 10, 113, 50)) {
-	    mainScreen = setScreen();
-	    joinmsg = '';
-	    gameid = '';
-	}
-	else if (gameScreen && buttonCheck(touch.pageX, touch.pageY, 875, 10, 100, 25)) {
-	    mainScreen = setScreen();
-	    socket.emit('leaveRoom', false);
-	    win = -1
-	    forceEnd = 0;
-	    score = 0;
-	    theirScore = 0;
-	    gameid = '';
-	    serverID = undefined;
-	    ball=deadball;
-	}
-	else if (overScreen && buttonCheck(touch.pageX, touch.pageY, 419, 564, 150, 50)) {
-	    mainScreen = setScreen();
-	    socket.emit('leaveRoom', true);
-	    win = -1
-	    forceEnd = 0;
-	    score = 0;
-	    theirScore = 0;
-	    gameid = '';
-	    serverID = undefined;
-	    ball=deadball;
+    if (mainScreen && buttonCheckN(touch.pageX, touch.pageY, .060, .345, .424, .273)) {
+        pointsChecked = 3;
+        pointsScreen = setScreen();
+    }
+    else if (mainScreen && buttonCheckN(touch.pageX, touch.pageY, .515, .345, .424, .273)) {
+        joinScreen = setScreen();
+    }
+    else if (pointsScreen && buttonCheck(touch.pageX, touch.pageY, 165, 212, 200, 200)) {
+        pointsChecked = 3;
+    }
+    else if (pointsScreen && buttonCheck(touch.pageX, touch.pageY, 398, 212, 200, 200)) {
+        pointsChecked = 5;
+    }
+    else if (pointsScreen && buttonCheck(touch.pageX, touch.pageY, 627, 212, 200, 200)) {
+        pointsChecked = 7;
+    }
+    else if (pointsScreen && buttonCheck(touch.pageX, touch.pageY, 5, 10, 113, 50)) {
+        mainScreen = setScreen();
+        pointsChecked = 0;
+    }
+    else if (pointsScreen && buttonCheck(touch.pageX, touch.pageY, 337, 500, 350, 100)) {
+        serverID = ''
+        waitScreen = setScreen();
+        socket.emit('getRoom', pointsChecked);
+    }
+    else if (waitScreen && buttonCheck(touch.pageX, touch.pageY, 406, 564, 175, 50)) {
+        mainScreen = setScreen();
+        socket.emit('leaveRoom', true);
+    }
+    
+    else if (joinScreen && buttonCheck(touch.pageX, touch.pageY, 356, 637, 75, 75)) {
+        setId(-1);
+    }
+    else if (joinScreen && buttonCheck(touch.pageX, touch.pageY, 456, 637, 75, 75)) {
+        setId(0)
+    }
+    else if (joinScreen && gameidfull && buttonCheck(touch.pageX, touch.pageY, 556, 637, 75, 75)) {
+        socket.emit('checkRoom', gameid);
+    }
+    else if (joinScreen && buttonCheck(touch.pageX, touch.pageY, 5, 10, 113, 50)) {
+        mainScreen = setScreen();
+        joinmsg = '';
+        gameid = '';
+    }
+    else if (gameScreen && buttonCheck(touch.pageX, touch.pageY, 875, 10, 100, 25)) {
+        mainScreen = setScreen();
+        socket.emit('leaveRoom', false);
+        win = -1
+        forceEnd = 0;
+        score = 0;
+        theirScore = 0;
+        gameid = '';
+        serverID = undefined;
+        ball = deadball;
+    }
+    else if (overScreen && buttonCheck(touch.pageX, touch.pageY, 432, 602, 125, 38)) {
+        mainScreen = setScreen();
+        socket.emit('leaveRoom', true);
+        win = -1
+        forceEnd = 0;
+        score = 0;
+        theirScore = 0;
+        gameid = '';
+        serverID = undefined;
+        ball = deadball;
 
-	}
-	else if (gameScreen && buttonCheck(touch.pageX, touch.pageY, 449, 316, 90, 90)) {
-	    activeBall = true;
-	}
+    }
+    else if (gameScreen && buttonCheck(touch.pageX, touch.pageY, 449, 316, 90, 90)) {
+        activeBall = true;
+    }
     event.preventDefault();
 }, false);
 
@@ -490,9 +535,9 @@ loadingScreen = setScreen();
 function gameLoop() {
     requestAnimationFrame(gameLoop);
     if (gameScreen) {
-    	if (activeBall) {
-    	    canUpdate();
-		}
+        if (activeBall) {
+            canUpdate();
+        }
         canDraw();
     }
     if (mainScreen) {
@@ -502,16 +547,16 @@ function gameLoop() {
         loading();
     }
     if (pointsScreen) {
-    	points();
+        points();
     }
     if (waitScreen) {
-    	wait();
+        wait();
     }
     if (joinScreen) {
-    	joining();
+        joining();
     }
     if (overScreen) {
-    	over();
+        over();
     }
 };
 
